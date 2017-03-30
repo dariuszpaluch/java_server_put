@@ -14,7 +14,7 @@ import java.util.*;
 public class TPSIServer {
 
 	public static void main(String[] args) throws Exception {
-		int port = 8002;
+		int port = 8003;
 		HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 		server.createContext("/", new RootHandler());
 		System.out.println("Starting server on port: " + port);
@@ -29,12 +29,7 @@ public class TPSIServer {
 		}
 
 		public void addPathToStatistics(String path) {
-			if(statistics.get(path) == null ){
-				statistics.put(path, 1);
-			}
-			else {
-				statistics.put(path, statistics.get(path) + 1);
-			}
+			statistics.merge(path, 1, (a, b) -> a + b);
 			System.out.println("Add to statistics: " + path);
 		}
 
@@ -100,7 +95,7 @@ public class TPSIServer {
 
 			//set response from server to client
 			responseHeaders.forEach((key, values) -> {
-				if(!Objects.equals(key, "Transfer-Encoding")) {
+				if(key != null && !Objects.equals(key, "Transfer-Encoding")) {
 					for(String value : values) {
 						exchange.getResponseHeaders().set(key, value);
 					}
