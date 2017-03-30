@@ -29,7 +29,7 @@ public class TPSIServer {
 		}
 
 		public void addPathToStatistics(String path) {
-			statistics.merge(path, 1, (a, b) -> a + b);
+			statistics.merge(path, 1, (a, b) -> a + b); //add with 1, or  value++
 			System.out.println("Add to statistics: " + path);
 		}
 
@@ -52,7 +52,12 @@ public class TPSIServer {
 			String method = exchange.getRequestMethod(); //type of call: GET, PUT, ..
 			Map<String, List<String>> headers = exchange.getRequestHeaders();
 			String host = headers.get("HOST").get(0);
+			byte[] requestBody = null;
+			if(method.equals("POST") || method.equals("PUT")) {
+				requestBody = readFully(exchange.getRequestBody());
+			}
 
+			//add statistics
 			this.addPathToStatistics(host);
 
 
@@ -67,15 +72,14 @@ public class TPSIServer {
 				}
 			});
 
-			if(method.equals("POST") || method.equals("PUT")) {
-				connection.setDoOutput(true);
-
-				byte[] tmp = IOUtils.readFully(exchange.getRequestBody(), -1, true);
-				OutputStream requestBody = connection.getOutputStream();
-				requestBody.write(tmp);
-				requestBody.close();
+			if(requestBody != null) {
+				connection.setDoOutput(true); //inform to I want send output a request body
+				OutputStream requestBodyStream = connection.getOutputStream();
+				requestBodyStream.write(requestBody);
+				requestBodyStream.close();
 			}
 
+			//connect to server
 			connection.connect();
 
 
