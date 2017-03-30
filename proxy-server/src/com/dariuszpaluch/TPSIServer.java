@@ -9,10 +9,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TPSIServer {
 
@@ -38,6 +35,7 @@ public class TPSIServer {
 			else {
 				statistics.put(path, statistics.get(path) + 1);
 			}
+			System.out.println("Add to statistics: " + path);
 		}
 
 		public void handle(final HttpExchange exchange) throws IOException {
@@ -48,37 +46,33 @@ public class TPSIServer {
 
 			this.addPathToStatistics(host);
 
+			//request
+			URL url = new URL(path);
+			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+			httpCon.setRequestMethod(method);
 
-			System.out.println(path);
-//			if(statistics.get(path) > 0) {
-//				statistics.replace(path, statistics.get(path), statistics.get(path) + 1);
-//			}
-//			statistics.put(path, 1);
+			headers.forEach((k,v) -> {
+				String name = k;
+				List<String> values = v;
 
-			URL u = new URL(path);
-			HttpURLConnection connection = (HttpURLConnection) u.openConnection();
-			connection.setRequestMethod(method);
-
-			Set<String> keys = exchange.getRequestHeaders().keySet();
-			for(String key: keys) {
-				List<String> values = exchange.getRequestHeaders().get(key);
-				for(String value: values) {
-					connection.setRequestProperty(key, value);
+				for(String value : values) {
+					httpCon.setRequestProperty(name, value);
 				}
-			}
-			connection.connect();
+			});
 
-			BufferedReader in = new BufferedReader(
-					new InputStreamReader(
-						connection.getInputStream()
-					)
-			);
+//			connection.connect();
 
-			int status = connection.getResponseCode();
-			InputStream response = connection.getInputStream();
-			byte[] body = IOUtils.readFully(response, -1, true);
-
-			OutputStream responseBody = exchange.getResponseBody();
+//			BufferedReader in = new BufferedReader(
+//					new InputStreamReader(
+//						connection.getInputStream()
+//					)
+//			);
+//
+//			int status = connection.getResponseCode();
+//			InputStream response = connection.getInputStream();
+//			byte[] body = IOUtils.readFully(response, -1, true);
+//
+//			OutputStream responseBody = exchange.getResponseBody();
 //			exchange.sendResponseHeaders(status, body.length);
 
 //			responseBody.write(body);
@@ -89,7 +83,6 @@ public class TPSIServer {
 //			OutputStream os = exchange.getResponseBody();
 //			os.write(response.getBytes());
 //			os.close();
-			addPathToStatistics(path);
 		}
 	}
 }
