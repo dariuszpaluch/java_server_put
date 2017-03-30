@@ -46,6 +46,7 @@ public class TPSIServer {
 		}
 
 		public void handle(final HttpExchange exchange) throws IOException {
+
 			//get request from client
 			String path = exchange.getRequestURI().toString();
 			String method = exchange.getRequestMethod(); //type of call: GET, PUT, ..
@@ -53,6 +54,7 @@ public class TPSIServer {
 			String host = headers.get("HOST").get(0);
 
 			this.addPathToStatistics(host);
+
 
 			//set request from client to server
 			URL url = new URL(path);
@@ -76,21 +78,19 @@ public class TPSIServer {
 
 			connection.connect();
 
+
 			//get response from server
-			connection.getInputStream();
-//			byte[] responseBytes = readFully(connection.getInputStream());
+			int responseCode = connection.getResponseCode();
+
 			InputStream response;
 			try {
 				response = connection.getInputStream();
-				//System.out.println("Method: " + method + ", status: " + status);
 			} catch(Exception e) {
 				response = connection.getErrorStream();
-				//System.out.println("EXCEPTION, Method: " + method + ", status: " + status);
 			}
 
-			byte[] responseBytes = IOUtils.readFully(response, -1, true);
+			byte[] responseBytes = readFully(response);
 			Map<String, List<String>> responseHeaders = connection.getHeaderFields();
-			int responseCode = connection.getResponseCode();
 
 
 			//set response from server to client
@@ -103,13 +103,12 @@ public class TPSIServer {
 			});
 
 			int responseLength;
-			if(responseCode == HttpURLConnection.HTTP_NO_CONTENT || responseCode == HttpURLConnection.HTTP_NOT_MODIFIED) {
+			if(responseCode == HttpURLConnection.HTTP_NO_CONTENT
+					|| responseCode == HttpURLConnection.HTTP_NOT_MODIFIED) {
 				responseLength = -1;
 			} else {
 				responseLength = responseBytes.length;
 			}
-			System.out.println(responseBytes.length);
-
 			OutputStream responseBody = exchange.getResponseBody();
 			exchange.sendResponseHeaders(responseCode, responseLength);
 			responseBody.write(responseBytes);
