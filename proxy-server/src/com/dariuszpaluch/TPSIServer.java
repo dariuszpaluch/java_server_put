@@ -14,7 +14,7 @@ import java.util.*;
 public class TPSIServer {
 
 	public static void main(String[] args) throws Exception {
-		int port = 8000;
+		int port = 8002;
 		HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 		server.createContext("/", new RootHandler());
 		System.out.println("Starting server on port: " + port);
@@ -38,7 +38,20 @@ public class TPSIServer {
 			System.out.println("Add to statistics: " + path);
 		}
 
+		public static byte[] readFully(InputStream input) throws IOException
+		{
+			byte[] buffer = new byte[8192];
+			int bytesRead;
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			while ((bytesRead = input.read(buffer)) != -1)
+			{
+				output.write(buffer, 0, bytesRead);
+			}
+			return output.toByteArray();
+		}
+
 		public void handle(final HttpExchange exchange) throws IOException {
+			//get request from client
 			String path = exchange.getRequestURI().toString();
 			String method = exchange.getRequestMethod(); //type of call: GET, PUT, ..
 			Map<String, List<String>> headers = exchange.getRequestHeaders();
@@ -46,7 +59,7 @@ public class TPSIServer {
 
 			this.addPathToStatistics(host);
 
-			//pass request from client to connection
+			//set request from client to server
 			URL url = new URL(path);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod(method);
@@ -57,40 +70,55 @@ public class TPSIServer {
 				}
 			});
 
+			if(method.equals("POST") || method.equals("PUT")) {
+				connection.setDoOutput(true);
+
+				byte[] tmp = IOUtils.readFully(exchange.getRequestBody(), -1, true);
+				OutputStream requestBody = connection.getOutputStream();
+				requestBody.write(tmp);
+				requestBody.close();
+			}
+
 			connection.connect();
 
 			//get response from server
 			connection.getInputStream();
-			BufferedReader responseBuffer = new BufferedReader(new InputStreamReader(
-					connection.getInputStream()));
+//			byte[] responseBytes = readFully(connection.getInputStream());
+			InputStream response;
+			try {
+				response = connection.getInputStream();
+				//System.out.println("Method: " + method + ", status: " + status);
+			} catch(Exception e) {
+				response = connection.getErrorStream();
+				//System.out.println("EXCEPTION, Method: " + method + ", status: " + status);
+			}
 
+			byte[] responseBytes = IOUtils.readFully(response, -1, true);
 			Map<String, List<String>> responseHeaders = connection.getHeaderFields();
+			int responseCode = connection.getResponseCode();
 
 
 			//set response from server to client
 			responseHeaders.forEach((key, values) -> {
-				if(key != "Transfer-Encoding") {
+				if(!Objects.equals(key, "Transfer-Encoding")) {
 					for(String value : values) {
 						exchange.getResponseHeaders().set(key, value);
 					}
 				}
 			});
 
+			int responseLength;
+			if(responseCode == HttpURLConnection.HTTP_NO_CONTENT || responseCode == HttpURLConnection.HTTP_NOT_MODIFIED) {
+				responseLength = -1;
+			} else {
+				responseLength = responseBytes.length;
+			}
+			System.out.println(responseBytes.length);
 
-//
-//			int status = connection.getResponseCode();
-//			InputStream response = connection.getInputStream();
-//			byte[] body = IOUtils.readFully(response, -1, true);
-//
-//			OutputStream responseBody = exchange.getResponseBody();
-//			exchange.sendResponseHeaders(status, body.length);
-
-			String response = "Hello World!";
-			exchange.getResponseHeaders().set("Content-Type", "text/plain");
-			exchange.sendResponseHeaders(200, response.length());
-			OutputStream os = exchange.getResponseBody();
-			os.write(response.getBytes());
-			os.close();
+			OutputStream responseBody = exchange.getResponseBody();
+			exchange.sendResponseHeaders(responseCode, responseLength);
+			responseBody.write(responseBytes);
+			responseBody.close();
 		}
 	}
 }
