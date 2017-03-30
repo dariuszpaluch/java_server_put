@@ -46,27 +46,37 @@ public class TPSIServer {
 
 			this.addPathToStatistics(host);
 
-			//request
+			//pass request from client to connection
 			URL url = new URL(path);
-			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
-			httpCon.setRequestMethod(method);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod(method);
 
-			headers.forEach((k,v) -> {
-				String name = k;
-				List<String> values = v;
-
+			headers.forEach((key, values) -> {
 				for(String value : values) {
-					httpCon.setRequestProperty(name, value);
+					connection.setRequestProperty(key, value);
 				}
 			});
 
-//			connection.connect();
+			connection.connect();
 
-//			BufferedReader in = new BufferedReader(
-//					new InputStreamReader(
-//						connection.getInputStream()
-//					)
-//			);
+			//get response from server
+			connection.getInputStream();
+			BufferedReader responseBuffer = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+
+			Map<String, List<String>> responseHeaders = connection.getHeaderFields();
+
+
+			//set response from server to client
+			responseHeaders.forEach((key, values) -> {
+				if(key != "Transfer-Encoding") {
+					for(String value : values) {
+						exchange.getResponseHeaders().set(key, value);
+					}
+				}
+			});
+
+
 //
 //			int status = connection.getResponseCode();
 //			InputStream response = connection.getInputStream();
@@ -75,14 +85,12 @@ public class TPSIServer {
 //			OutputStream responseBody = exchange.getResponseBody();
 //			exchange.sendResponseHeaders(status, body.length);
 
-//			responseBody.write(body);
-//			responseBody.close();
-//			String response = "Hello World!";
-//			exchange.getResponseHeaders().set("Content-Type", "text/plain");
-//			exchange.sendResponseHeaders(200, response.length());
-//			OutputStream os = exchange.getResponseBody();
-//			os.write(response.getBytes());
-//			os.close();
+			String response = "Hello World!";
+			exchange.getResponseHeaders().set("Content-Type", "text/plain");
+			exchange.sendResponseHeaders(200, response.length());
+			OutputStream os = exchange.getResponseBody();
+			os.write(response.getBytes());
+			os.close();
 		}
 	}
 }
