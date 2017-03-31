@@ -9,12 +9,14 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class TPSIServer {
 
 	public static void main(String[] args) throws Exception {
-		int port = 8003;
+		int port = 8000;
 		HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 		server.createContext("/", new RootHandler());
 		System.out.println("Starting server on port: " + port);
@@ -23,14 +25,18 @@ public class TPSIServer {
 
 	static class RootHandler implements HttpHandler {
 		private final HashMap<String, Integer> statistics;
+		private List<String> blackList;
+		private boolean readedFile = false;
 
 		public RootHandler() {
+
 			this.statistics = new HashMap<>();
+			this.readBlackListFile();
 		}
 
 		public void addPathToStatistics(String path) {
 			statistics.merge(path, 1, (a, b) -> a + b); //add with 1, or  value++
-			System.out.println("Add to statistics: " + path);
+//			System.out.println("Add to statistics: " + path);
 		}
 
 		public static byte[] readFully(InputStream input) throws IOException
@@ -45,6 +51,38 @@ public class TPSIServer {
 			return output.toByteArray();
 		}
 
+		private void readBlackListFile(){
+			this.readedFile = true;
+			this.blackList = new ArrayList<String>();
+			try {
+				FileReader file = new FileReader("black_list.txt");
+				Scanner blackListFile = new Scanner(file);
+				while (blackListFile.hasNext()) {
+					this.blackList.add(blackListFile.next());
+				}
+			}
+			catch (Exception e) {
+				System.out.println(e);
+				System.out.println("Brak czarnej listy");
+			}
+		}
+
+		private boolean checkLinkInBlackList(String host) {
+			if(!this.readedFile) {
+				this.readBlackListFile();
+			}else {
+				if (this.blackList.size() > 0){
+					for (String blackPath : this.blackList) {
+						if (blackPath.equals(host)) {
+							System.out.println("This page is on black list");
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+
 		public void handle(final HttpExchange exchange) throws IOException {
 
 			//get request from client
@@ -57,66 +95,74 @@ public class TPSIServer {
 				requestBody = readFully(exchange.getRequestBody());
 			}
 
-			//add statistics
-			this.addPathToStatistics(host);
-
-
-			//set request from client to server
-			URL url = new URL(path);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod(method);
-
-			headers.forEach((key, values) -> {
-				for(String value : values) {
-					connection.setRequestProperty(key, value);
-				}
-			});
-
-			if(requestBody != null) {
-				connection.setDoOutput(true); //inform to I want send output a request body
-				OutputStream requestBodyStream = connection.getOutputStream();
-				requestBodyStream.write(requestBody);
-				requestBodyStream.close();
+			//check on blackList
+			if(this.checkLinkInBlackList(host)) {
+				exchange.sendResponseHeaders(403, -1);
 			}
+			else {
 
-			//connect to server
-			connection.connect();
-
-
-			//get response from server
-			int responseCode = connection.getResponseCode();
-
-			InputStream response;
-			try {
-				response = connection.getInputStream();
-			} catch(Exception e) {
-				response = connection.getErrorStream();
-			}
-
-			byte[] responseBytes = readFully(response);
-			Map<String, List<String>> responseHeaders = connection.getHeaderFields();
+				//add statistics
+				this.addPathToStatistics(host);
 
 
-			//set response from server to client
-			responseHeaders.forEach((key, values) -> {
-				if(key != null && !Objects.equals(key, "Transfer-Encoding")) {
+				//set request from client to server
+				URL url = new URL(path);
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestMethod(method);
+
+				headers.forEach((key, values) -> {
 					for(String value : values) {
-						exchange.getResponseHeaders().set(key, value);
+						connection.setRequestProperty(key, value);
 					}
-				}
-			});
+				});
 
-			int responseLength;
-			if(responseCode == HttpURLConnection.HTTP_NO_CONTENT
-					|| responseCode == HttpURLConnection.HTTP_NOT_MODIFIED) {
-				responseLength = -1;
-			} else {
-				responseLength = responseBytes.length;
+				if(requestBody != null) {
+					connection.setDoOutput(true); //inform to I want send output a request body
+					OutputStream requestBodyStream = connection.getOutputStream();
+					requestBodyStream.write(requestBody);
+					requestBodyStream.close();
+				}
+
+				//connect to server
+				connection.connect();
+
+
+				//get response from server
+				int responseCode = connection.getResponseCode();
+
+				InputStream response;
+				try {
+					response = connection.getInputStream();
+				} catch(Exception e) {
+					response = connection.getErrorStream();
+				}
+
+				byte[] responseBytes = readFully(response);
+				Map<String, List<String>> responseHeaders = connection.getHeaderFields();
+
+
+				//set response from server to client
+				responseHeaders.forEach((key, values) -> {
+					if(key != null && !Objects.equals(key, "Transfer-Encoding")) {
+						for(String value : values) {
+							exchange.getResponseHeaders().set(key, value);
+						}
+					}
+				});
+
+				int responseLength;
+				if(responseCode == HttpURLConnection.HTTP_NO_CONTENT
+						|| responseCode == HttpURLConnection.HTTP_NOT_MODIFIED) {
+					responseLength = -1;
+				} else {
+					responseLength = responseBytes.length;
+				}
+				OutputStream responseBody = exchange.getResponseBody();
+				exchange.sendResponseHeaders(responseCode, responseLength);
+				responseBody.write(responseBytes);
+				responseBody.close();
 			}
-			OutputStream responseBody = exchange.getResponseBody();
-			exchange.sendResponseHeaders(responseCode, responseLength);
-			responseBody.write(responseBytes);
-			responseBody.close();
+
 		}
 	}
 }
