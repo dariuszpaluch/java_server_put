@@ -16,9 +16,12 @@ import java.util.*;
 public class TPSIServer {
 
 	public static void main(String[] args) throws Exception {
-		int port = 8012;
+		int port = 8013;
 		HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-		server.createContext("/", new RootHandler());
+		RootHandler proxyHandler = new RootHandler();
+		proxyHandler.initialization();
+
+		server.createContext("/", proxyHandler);
 		System.out.println("Starting server on port: " + port);
 		server.start();
 	}
@@ -43,8 +46,14 @@ public class TPSIServer {
 				return host;
 			}
 
+			StatisticItem(String host, int amount, int dataSize){
+				this.amount = amount;
+				this.dataSize = dataSize;
+				this.host = host;
+			}
+
 			StatisticItem(String host, int dataSize){
-				this.amount = 0;
+				this.amount = 1;
 				this.dataSize = dataSize;
 				this.host = host;
 			}
@@ -59,8 +68,7 @@ public class TPSIServer {
 //		private final HashMap<String, StatisticItem> statistics;
 		private List<String> blackList;
 		private final  List<StatisticItem> statistics;
-		private boolean readedFile = false;
-
+		private boolean preparedData = false;
 		public RootHandler() {
 
 			this.statistics = new ArrayList<>();
@@ -68,23 +76,45 @@ public class TPSIServer {
 			this.readBlackListFile();
 		}
 
+		public void readFromCSV() {
+			// use comma as separator
+			String csvFile = "statistics2.csv";
+			BufferedReader br = null;
+			String line = "";
+			String cvsSplitBy = ";";
+			try {
+				br = new BufferedReader(new FileReader(csvFile));
+				br.readLine(); //remove first title line
+			while ((line = br.readLine()) != null) {
+				String[] data = line.split(cvsSplitBy);
+				this.statistics.add(new StatisticItem(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2])));
+				System.out.println("host= " + data[0] + " , amount=" + data[1] + " , dataSize=" + data[2]);
+
+			}
+			} catch (FileNotFoundException e) {
+//				e.printStackTrace();
+			} catch (IOException e) {
+//				e.printStackTrace();
+			}
+		}
+
 		public void saveStatisticsToCSV() {
 			PrintWriter pw = null;
 			try {
-				pw = new PrintWriter(new File("statistics.csv"));
+				pw = new PrintWriter(new File("statistics2.csv"));
 				StringBuilder sb = new StringBuilder();
 				sb.append("host");
-				sb.append(';-');
+				sb.append(";");
 				sb.append("amount");
-				sb.append(';');
+				sb.append(";");
 				sb.append("dataSize");
-				sb.append('\n');
+				sb.append("\n");
 
 				for(StatisticItem statisticItem : this.statistics) {
-					sb.append(statisticItem.getHost());
-					sb.append(';');
+					sb.append(statisticItem.getHost().replace(";",""));
+					sb.append(";");
 					sb.append(Integer.toString(statisticItem.getAmount()));
-					sb.append(';');
+					sb.append(";");
 					sb.append(Long.toString(statisticItem.getDataSize()));
 					sb.append('\n');
 				}
@@ -139,7 +169,6 @@ public class TPSIServer {
 		}
 
 		private void readBlackListFile(){
-			this.readedFile = true;
 			this.blackList = new ArrayList<String>();
 			try {
 				FileReader file = new FileReader("black_list.txt");
@@ -155,28 +184,41 @@ public class TPSIServer {
 		}
 
 		private boolean checkLinkInBlackList(String host) {
-			if(!this.readedFile) {
-				this.readBlackListFile();
-			}else {
-				if (this.blackList.size() > 0){
-					for (String blackPath : this.blackList) {
-						if (blackPath.equals(host)) {
-							System.out.println("This page is on black list");
-							return true;
-						}
+			if (this.blackList.size() > 0){
+				for (String blackPath : this.blackList) {
+					if (blackPath.equals(host)) {
+						System.out.println("This page is on black list");
+						return true;
 					}
 				}
 			}
 			return false;
 		}
 
+		public void initialization() {
+			this.readFromCSV();
+			this.readBlackListFile();
+		}
 		public void handle(final HttpExchange exchange) throws IOException {
+
+			if(!this.preparedData) {
+				this.initialization();
+			}
 
 			//get request from client
 			String path = exchange.getRequestURI().toString();
 			String method = exchange.getRequestMethod(); //type of call: GET, PUT, ..
 			Map<String, List<String>> headers = exchange.getRequestHeaders();
+			URL myUrl = new URL(path);
+			System.out.println(myUrl.getHost());
+			System.out.println("TUTAJ");
 			String host = headers.get("HOST").get(0);
+
+			System.out.println("host: " + host);
+			System.out.println(path);
+
+
+
 			byte[] requestBody = null;
 			if(method.equals("POST") || method.equals("PUT")) {
 				requestBody = readFully(exchange.getRequestBody());
