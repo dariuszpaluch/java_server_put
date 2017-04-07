@@ -88,20 +88,27 @@ public class TPSIServer {
 			while ((line = br.readLine()) != null) {
 				String[] data = line.split(cvsSplitBy);
 				this.statistics.add(new StatisticItem(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2])));
-				System.out.println("host= " + data[0] + " , amount=" + data[1] + " , dataSize=" + data[2]);
+//				System.out.println("host= " + data[0] + " , amount=" + data[1] + " , dataSize=" + data[2]);
 
 			}
+				br.close();
+
 			} catch (FileNotFoundException e) {
 //				e.printStackTrace();
 			} catch (IOException e) {
 //				e.printStackTrace();
 			}
+
 		}
 
 		public void saveStatisticsToCSV() {
 			PrintWriter pw = null;
 			try {
-				pw = new PrintWriter(new File("statistics2.csv"));
+				File file = new File("statistics2.csv");
+				PrintWriter writer = new PrintWriter(file);
+				writer.print("");
+				writer.close();
+				pw = new PrintWriter(file);
 				StringBuilder sb = new StringBuilder();
 				sb.append("host");
 				sb.append(";");
@@ -122,7 +129,7 @@ public class TPSIServer {
 
 				pw.write(sb.toString());
 				pw.close();
-				System.out.println("done!");
+//				System.out.println("done!");
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -184,9 +191,11 @@ public class TPSIServer {
 		}
 
 		private boolean checkLinkInBlackList(String host) {
+			System.out.println(host);
 			if (this.blackList.size() > 0){
 				for (String blackPath : this.blackList) {
-					if (blackPath.equals(host)) {
+					String blackPathwww = "www." + blackPath;
+					if (blackPath.equals(host) || blackPathwww.equals(host)) {
 						System.out.println("This page is on black list");
 						return true;
 					}
@@ -198,6 +207,7 @@ public class TPSIServer {
 		public void initialization() {
 			this.readFromCSV();
 			this.readBlackListFile();
+			this.preparedData = true;
 		}
 		public void handle(final HttpExchange exchange) throws IOException {
 
@@ -210,12 +220,12 @@ public class TPSIServer {
 			String method = exchange.getRequestMethod(); //type of call: GET, PUT, ..
 			Map<String, List<String>> headers = exchange.getRequestHeaders();
 			URL myUrl = new URL(path);
-			System.out.println(myUrl.getHost());
-			System.out.println("TUTAJ");
+//			System.out.println(myUrl.getHost());
+//			System.out.println("TUTAJ");
 			String host = headers.get("HOST").get(0);
 
-			System.out.println("host: " + host);
-			System.out.println(path);
+//			System.out.println("host: " + host);
+//			System.out.println(path);
 
 
 
@@ -280,10 +290,10 @@ public class TPSIServer {
 						|| responseCode == HttpURLConnection.HTTP_NOT_MODIFIED) {
 					responseLength = -1;
 					//add statistics
-					this.addPathToStatistics(path, 0);
+					this.addPathToStatistics(host, 0);
 				} else {
 					responseLength = responseBytes.length;
-					this.addPathToStatistics(path, responseLength);
+					this.addPathToStatistics(host, responseLength);
 				}
 
 
