@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="org.glassfish.web:javax.el:2.2.6" type="repository">
+    <properties maven-id="org.glassfish.web:javax.el:2.2.6" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/glassfish/web/javax.el/2.2.6/javax.el-2.2.6.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/javax/el/javax.el-api/2.2.5/javax.el-api-2.2.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
