@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-class Course {
+public class Course {
     @NotNull
     String name;
     @NotNull

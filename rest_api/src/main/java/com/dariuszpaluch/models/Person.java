@@ -3,6 +3,7 @@ package com.dariuszpaluch.models;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Calendar;
+import java.util.Date;
 
 class Person {
     @NotNull
@@ -10,9 +11,9 @@ class Person {
     @NotNull
     private String surname;
     @NotNull
-    private Calendar dateOfBirth;
+    private Date dateOfBirth;
 
-    Person(String name, String surname, Calendar dateOfBirth) {
+    Person(String name, String surname, Date dateOfBirth) {
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
@@ -37,11 +38,11 @@ class Person {
         this.surname = surname;
     }
 
-    public Calendar getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Calendar dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 }

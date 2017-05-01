@@ -5,13 +5,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Calendar;
 
 @XmlRootElement
-class Grade {
+public class Grade {
     @NotNull
     private Double value;
     @NotNull
     private Calendar created;
-    @NotNull
-    private Course course;
+//    @NotNull
+//    private Course course;
 
     public Grade() {
     }
@@ -19,7 +19,7 @@ class Grade {
     public Grade(Double value, Calendar created, Course course) {
         this.value = value;
         this.created = created;
-        this.course = course;
+//        this.course = course;
     }
 
     public Double getValue() {
@@ -38,11 +38,11 @@ class Grade {
         this.created = created;
     }
 
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
+//    public Course getCourse() {
+//        return course;
+//    }
+//
+//    public void setCourse(Course course) {
+//        this.course = course;
+//    }
 }
