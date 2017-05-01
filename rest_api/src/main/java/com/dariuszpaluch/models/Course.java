@@ -2,15 +2,28 @@ package com.dariuszpaluch.models;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 
 @XmlRootElement
 public class Course {
     @NotNull
-    String name;
+    private int id;
+
     @NotNull
-    Teacher teacher;
+    private String name;
+    @NotNull
+    private String teacher;
+
+    List<Grade> grades;
 
     public Course() {
+    }
+
+    public Course(String name, String teacher) {
+        this.name = name;
+        this.teacher = teacher;
+        this.grades = new ArrayList<>();
     }
 
     public String getName() {
@@ -21,11 +34,15 @@ public class Course {
         this.name = name;
     }
 
-    public Teacher getTeacher() {
+    public String getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(Teacher teacher) {
+    public void setTeacher(String teacher) {
         this.teacher = teacher;
+    }
+
+    public int getId() {
+        return id;
     }
 }

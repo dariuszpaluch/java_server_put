@@ -7,11 +7,15 @@ import java.util.Calendar;
 @XmlRootElement
 public class Grade {
     @NotNull
+    private int id;
+
+    @NotNull
     private Double value;
     @NotNull
     private Calendar created;
-//    @NotNull
-//    private Course course;
+
+    @NotNull
+    private Course course;
 
     public Grade() {
     }
@@ -19,7 +23,7 @@ public class Grade {
     public Grade(Double value, Calendar created, Course course) {
         this.value = value;
         this.created = created;
-//        this.course = course;
+        this.course = course;
     }
 
     public Double getValue() {
@@ -38,11 +42,15 @@ public class Grade {
         this.created = created;
     }
 
-//    public Course getCourse() {
-//        return course;
-//    }
-//
-//    public void setCourse(Course course) {
-//        this.course = course;
-//    }
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

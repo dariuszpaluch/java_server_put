@@ -3,24 +3,16 @@ package com.dariuszpaluch.resources;
 
 import com.dariuszpaluch.dao.StudentDaoImpl;
 import com.dariuszpaluch.dao.interfaces.IStudentDao;
-import com.dariuszpaluch.models.Course;
-import com.dariuszpaluch.models.Grade;
 import com.dariuszpaluch.models.Student;
 import com.dariuszpaluch.service.StudentService;
-import org.glassfish.jersey.linking.InjectLink;
-import org.glassfish.jersey.linking.InjectLinks;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import javax.ws.rs.ext.Provider;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Calendar;
 
 /**
  * Student resource (exposed at "students" path)
@@ -29,9 +21,6 @@ import java.util.Calendar;
 @Consumes(value = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class StudentResource {
-
-    private final IStudentDao students = new StudentDaoImpl();
-
     private final StudentService studentService;
 
     public StudentResource() {
@@ -40,7 +29,7 @@ public class StudentResource {
 
     @GET
     public Response getAll() {
-        return Response.ok(students.getAllStudents()).build();
+        return Response.ok(studentService.getAllStudents()).build();
     }
 
 
@@ -74,7 +63,7 @@ public class StudentResource {
     @DELETE
     @Path("/{index}")
     public Response delete(@PathParam("index") final String index) {
-        boolean result = students.deleteStudent(index);
+        boolean result = studentService.deleteStudent(index);
 
         return Response.ok().build();
     }
