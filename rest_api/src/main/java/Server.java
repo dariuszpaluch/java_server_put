@@ -1,3 +1,4 @@
+import com.dariuszpaluch.exception.DataNotFoundExceptionMapper;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
@@ -9,8 +10,11 @@ import java.net.URI;
 
 public class Server {
     public static void main(String[] args) throws IOException {
-        URI baseUri = UriBuilder.fromUri("http://localhost/").port(9998).build();
-        ResourceConfig config = new ResourceConfig().packages("com.dariuszpaluch.resources").register(DeclarativeLinkingFeature.class);
+        URI baseUri = UriBuilder.fromUri("http://localhost/").port(9000).build();
+        ResourceConfig config = new ResourceConfig().packages("com.dariuszpaluch").registerClasses(
+                DeclarativeLinkingFeature.class
+        );
+
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
         server.start();
     }
