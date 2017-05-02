@@ -9,14 +9,14 @@ import java.util.List;
 
 public class StudentDaoImpl implements IStudentDao {
 
-    private static final List<Student> students;
+    private List<Student> students;
 
-    static {
+    public StudentDaoImpl() {
         students = new ArrayList<Student>();
-        Student student1 = new Student("Dariusz", "Paluch", new Date(), "123456789");
-        Student student2 = new Student("Adam", "Nowak", new Date(), "123456789");
-        students.add(student1);
-        students.add(student2);
+    }
+
+    public StudentDaoImpl(List<Student> students) {
+        this.students = students;
     }
 
     @Override

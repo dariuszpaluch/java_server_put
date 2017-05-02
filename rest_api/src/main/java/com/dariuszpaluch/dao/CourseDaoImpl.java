@@ -8,10 +8,14 @@ import java.util.List;
 
 public class CourseDaoImpl implements ICourseDao {
 
-    private static final List<Course> courses;
+    private List<Course> courses;
 
-    static {
-        courses = new ArrayList<Course>();
+    public CourseDaoImpl() {
+        this.courses = new ArrayList<>();
+    }
+
+    public CourseDaoImpl(List<Course> courses) {
+        this.courses = courses;
     }
 
     @Override
@@ -36,6 +40,7 @@ public class CourseDaoImpl implements ICourseDao {
             if(item.getId() == id) {
                 item.setName(course.getName());
                 item.setTeacher(course.getTeacher());
+                return true;
             }
         }
 

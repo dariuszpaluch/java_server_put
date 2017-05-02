@@ -4,6 +4,7 @@ package com.dariuszpaluch.resources;
 import com.dariuszpaluch.dao.StudentDaoImpl;
 import com.dariuszpaluch.dao.interfaces.IStudentDao;
 import com.dariuszpaluch.models.Student;
+import com.dariuszpaluch.service.GradeService;
 import com.dariuszpaluch.service.StudentService;
 
 import javax.validation.constraints.NotNull;
@@ -22,9 +23,11 @@ import java.net.URI;
 @Produces(value = {MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class StudentResource {
     private final StudentService studentService;
+    private final GradeService gradeService;
 
     public StudentResource() {
         this.studentService = new StudentService();
+        this.gradeService = new GradeService();
     }
 
     @GET
@@ -41,6 +44,12 @@ public class StudentResource {
         return Response.ok(result).build();
     }
 
+    @GET
+    @Path("/{index}/grades")
+    public Response getGrades(@PathParam("index") final String index) {
+        return Response.ok(gradeService.getStudentGrade(index)).build();
+    }
+
     @POST
     public Response post(@NotNull Student student, @Context UriInfo uriInfo) {
         Student newStudent = studentService.addStudent(student);
@@ -54,8 +63,7 @@ public class StudentResource {
     @PUT
     @Path("/{index}")
     public Response put(@NotNull Student student, @PathParam("index") final String index) {
-        student.setIndex(index);
-        studentService.updateStudent(student, student.getIndex());
+        studentService.updateStudent(student, index);
 
         return Response.ok().build();
     }

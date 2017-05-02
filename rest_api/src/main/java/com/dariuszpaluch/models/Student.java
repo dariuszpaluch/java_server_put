@@ -16,29 +16,19 @@ import java.util.*;
 import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
 
 @XmlRootElement
-public class Student extends Person{
+public class Student extends Person {
     @NotNull
     private String index;
 
     @InjectLinks({
-            @InjectLink(value = "students/{index}", bindings = { @Binding(name = "index", value = "${instance.index}") }, rel = "self", style=ABSOLUTE)
+            @InjectLink(value = "students/{index}", bindings = {@Binding(name = "index", value = "${instance.index}")}, rel = "self", style = ABSOLUTE),
+            @InjectLink(value = "students", rel = "parent", style = ABSOLUTE),
+            @InjectLink(value = "students/{index}/grades",  bindings = {@Binding(name = "index", value = "${instance.index}")}, rel = "grades", style = ABSOLUTE)
     })
-    @XmlElement(name="link")
+    @XmlElement(name = "link")
     @XmlElementWrapper(name = "links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     List<Link> links;
-
-//    @Override
-//    public Map<String, String> unmarshal(StrStrMyMap v) throws Exception {
-//        Map<String, String> map = new HashMap<String,String>();
-//        for (Iterator<StrStrKeyVal> it = v.map.iterator(); it.hasNext();) {
-//            StrStrKeyVal strStr = it.next();
-//            map.put(strStr.key, strStr.value);
-//        }
-//        return map;
-//    }
-
-//    private Set<Grade> grades;
 
     public Student() {
     }
@@ -55,12 +45,4 @@ public class Student extends Person{
     public void setIndex(String index) {
         this.index = index;
     }
-
-//    public Set<Grade> getGrades() {
-//        return grades;
-//    }
-//
-//    public void setGrades(Set<Grade> grades) {
-//        this.grades = grades;
-//    }
 }

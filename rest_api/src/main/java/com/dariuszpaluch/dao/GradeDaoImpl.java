@@ -9,15 +9,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GradeDaoImpl implements IGradeDao{
-    private static final List<Grade> grades;
+    private List<Grade> grades;
 
-    static {
+    public GradeDaoImpl() {
         grades = new ArrayList<>();
+    }
+
+    public GradeDaoImpl(List<Grade> grades) {
+        this.grades = grades;
     }
 
     @Override
     public List<Grade> getAllGrades() {
         return grades;
+    }
+
+    @Override
+    public List<Grade> getStudentGrade(String studentIndex) {
+        List<Grade> studentGrades = new ArrayList<>();
+
+        for(Grade item: grades) {
+            if(item.getStudentIndex().equals(studentIndex)) {
+                studentGrades.add(item);
+            }
+        }
+
+        return studentGrades;
+    }
+
+    @Override
+    public List<Grade> getCourseGrade(int courseId) {
+        List<Grade> studentGrades = new ArrayList<>();
+
+        for(Grade item: grades) {
+            if(item.getCourseId() == courseId) {
+                studentGrades.add(item);
+            }
+        }
+
+        return studentGrades;
     }
 
     @Override
@@ -35,7 +65,8 @@ public class GradeDaoImpl implements IGradeDao{
     public boolean updateGrade(Grade grade, int id) {
         for(Grade item: grades) {
             if(item.getId() == id) {
-                item.setCourse(grade.getCourse());
+                item.setCourseId(grade.getCourseId());
+                item.setStudentIndex(grade.getStudentIndex());
                 item.setCreated(grade.getCreated());
                 item.setValue(grade.getValue());
             }

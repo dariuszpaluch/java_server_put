@@ -1,28 +1,23 @@
 package com.dariuszpaluch.service;
 
-import com.dariuszpaluch.dao.StudentDaoImpl;
+import com.dariuszpaluch.dao.Context;
 import com.dariuszpaluch.dao.interfaces.IStudentDao;
 import com.dariuszpaluch.exception.DataNotFoundException;
 import com.dariuszpaluch.models.Student;
 
-import javax.ws.rs.NotFoundException;
 import java.util.List;
 
 public class StudentService implements IStudentDao {
-    private IStudentDao students;
-
-    public StudentService() {
-        this.students = new StudentDaoImpl();
-    }
+    private final Context context = Context.getInstance();
 
     @Override
     public List<Student> getAllStudents() {
-        return students.getAllStudents();
+        return this.context.getStudents().getAllStudents();
     }
 
     @Override
     public Student getStudent(String index) {
-        Student student = students.getStudent(index);
+        Student student = this.context.getStudents().getStudent(index);
 
         if(student == null) {
             throw new DataNotFoundException("Student with index " + index + " not found");
@@ -33,7 +28,7 @@ public class StudentService implements IStudentDao {
 
     @Override
     public boolean updateStudent(Student student, String index) {
-        boolean result = students.updateStudent(student, index);
+        boolean result = this.context.getStudents().updateStudent(student, index);
 
         if(!result) {
             throw new DataNotFoundException("Student with index " + index + " not found");
@@ -44,7 +39,7 @@ public class StudentService implements IStudentDao {
 
     @Override
     public boolean deleteStudent(String index) {
-        boolean result = students.deleteStudent(index);
+        boolean result = this.context.getStudents().deleteStudent(index);
 
         if(!result) {
             throw new DataNotFoundException("Student with index " + index + " not found");
@@ -55,7 +50,7 @@ public class StudentService implements IStudentDao {
 
     @Override
     public Student addStudent(Student student) {
-        return students.addStudent(student);
+        return this.context.getStudents().addStudent(student);
     }
 
 }
