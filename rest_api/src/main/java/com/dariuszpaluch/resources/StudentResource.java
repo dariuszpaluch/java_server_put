@@ -3,6 +3,7 @@ package com.dariuszpaluch.resources;
 
 import com.dariuszpaluch.dao.StudentDaoImpl;
 import com.dariuszpaluch.dao.interfaces.IStudentDao;
+import com.dariuszpaluch.models.Grade;
 import com.dariuszpaluch.models.Student;
 import com.dariuszpaluch.service.GradeService;
 import com.dariuszpaluch.service.StudentService;
@@ -72,6 +73,36 @@ public class StudentResource {
     @Path("/{index}")
     public Response delete(@PathParam("index") final String index) {
         boolean result = studentService.deleteStudent(index);
+
+        return Response.ok().build();
+    }
+
+
+    @POST
+    @Path("/{index}/grades")
+    public Response postGrade(@NotNull Grade grade, @PathParam("index") final String index,  @Context UriInfo uriInfo) {
+        grade.setStudentIndex(index);
+        Grade newGrade = gradeService.addGrade(grade);
+
+        int newId = newGrade.getId();
+        URI uri = uriInfo.getAbsolutePathBuilder().path(Integer.toString(newId)).build();
+
+        return Response.created(uri).entity(newGrade).build();
+    }
+
+    @PUT
+    @Path("/{index}/grades/{id}")
+    public Response put(@NotNull Grade grade,  @PathParam("index") final String index, @PathParam("id") final int id) {
+        grade.setStudentIndex(index);
+        gradeService.updateGrade(grade, id);
+
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/{index}/grades/{id}")
+    public Response delete(@PathParam("index") final int id, @PathParam("index") final String index) {
+        gradeService.deleteGrade(id);
 
         return Response.ok().build();
     }

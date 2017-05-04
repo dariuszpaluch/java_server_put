@@ -18,6 +18,7 @@ import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
 
 @XmlRootElement
 public class Grade {
+    private static int idCounter = 0;
     @NotNull
     private int id;
 
@@ -32,8 +33,8 @@ public class Grade {
     private String studentIndex;
 
     @InjectLinks({
-            @InjectLink(value = "grades/{id}", bindings = {@Binding(name = "id", value = "${instance.id}")}, rel = "self", style = ABSOLUTE),
-            @InjectLink(value = "grades", rel = "parent", style = ABSOLUTE),
+            @InjectLink(value = "students/{index}/grades/{id}", bindings = {@Binding(name = "id", value = "${instance.id}"), @Binding(name = "index", value = "${instance.studentIndex}")}, rel = "self", style = ABSOLUTE),
+            @InjectLink(value = "students/{index}/grades", bindings = {@Binding(name = "index", value = "${instance.studentIndex}")}, rel = "parent", style = ABSOLUTE),
     })
     @XmlElement(name = "link")
     @XmlElementWrapper(name = "links")
@@ -41,6 +42,7 @@ public class Grade {
     List<Link> links;
 
     public Grade() {
+        this.id = generateNewId();
     }
 
     public Grade(Double value, Date created, int courseId, String studentIndex) {
@@ -48,6 +50,8 @@ public class Grade {
         this.created = created;
         this.courseId = courseId;
         this.studentIndex = studentIndex;
+        this.id = generateNewId();
+
     }
 
     public Double getValue() {
@@ -84,5 +88,10 @@ public class Grade {
 
     public int getId() {
         return id;
+    }
+
+    private int generateNewId() {
+        idCounter += 1;
+        return idCounter;
     }
 }
