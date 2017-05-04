@@ -25,11 +25,11 @@ public class GradeDaoImpl implements IGradeDao{
     }
 
     @Override
-    public List<Grade> getStudentGrade(String studentIndex) {
+    public List<Grade> getStudentGrade(int studentIndex) {
         List<Grade> studentGrades = new ArrayList<>();
 
         for(Grade item: grades) {
-            if(item.getStudentIndex().equals(studentIndex)) {
+            if(item.getStudentIndex() == studentIndex) {
                 studentGrades.add(item);
             }
         }

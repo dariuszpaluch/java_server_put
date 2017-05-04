@@ -30,7 +30,7 @@ public class Grade {
     @NotNull
     private int courseId;
     @NotNull
-    private String studentIndex;
+    private int studentIndex;
 
     @InjectLinks({
             @InjectLink(value = "students/{index}/grades/{id}", bindings = {@Binding(name = "id", value = "${instance.id}"), @Binding(name = "index", value = "${instance.studentIndex}")}, rel = "self", style = ABSOLUTE),
@@ -45,7 +45,7 @@ public class Grade {
         this.id = generateNewId();
     }
 
-    public Grade(Double value, Date created, int courseId, String studentIndex) {
+    public Grade(Double value, Date created, int courseId, int studentIndex) {
         this.value = value;
         this.created = created;
         this.courseId = courseId;
@@ -78,11 +78,11 @@ public class Grade {
         this.courseId = courseId;
     }
 
-    public String getStudentIndex() {
+    public int getStudentIndex() {
         return studentIndex;
     }
 
-    public void setStudentIndex(String studentIndex) {
+    public void setStudentIndex(int studentIndex) {
         this.studentIndex = studentIndex;
     }
 

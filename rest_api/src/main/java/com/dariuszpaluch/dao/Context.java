@@ -25,8 +25,8 @@ public class Context {
         dataCourses.add(course2);
 
         List<Student> dataStudents = new ArrayList<Student>();
-        Student student1 = new Student("Dariusz", "Paluch", new Date(), "123456789");
-        Student student2 = new Student("Adam", "Nowak", new Date(), "123456789");
+        Student student1 = new Student("Dariusz", "Paluch", new Date());
+        Student student2 = new Student("Adam", "Nowak", new Date());
         dataStudents.add(student1);
         dataStudents.add(student2);
 
@@ -41,6 +41,7 @@ public class Context {
         courses = new CourseDaoImpl(dataCourses);
         grades = new GradeDaoImpl(dataGrades);
         students = new StudentDaoImpl(dataStudents);
+        System.out.println(dataStudents.size());
     }
 
     public static Context getInstance()

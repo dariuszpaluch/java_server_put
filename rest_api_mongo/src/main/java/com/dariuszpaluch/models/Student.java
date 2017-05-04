@@ -1,0 +1,120 @@
+package com.dariuszpaluch.models;
+
+import com.dariuszpaluch.utils.DatastoreHandlerUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.bson.types.ObjectId;
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.annotations.*;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
+
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
+
+
+@XmlRootElement
+public class Student {
+  @XmlTransient
+  @Id
+  private ObjectId id;
+
+  @Indexed(name = "index", unique = true)
+  private int index;
+
+  private static int indexCounter = 0;
+
+  @NotNull
+  private String firstName;
+
+  @NotNull
+  private String lastName;
+
+  @NotNull
+  @JsonFormat(shape = JsonFormat.Shape.STRING,
+          pattern = "yyyy-MM-dd", timezone = "CET")
+  private Date dateOfBirth;
+
+  @InjectLinks({
+          @InjectLink(value = "students/{index}", bindings = {@Binding(name = "index", value = "${instance.index}")}, rel = "self", style = ABSOLUTE),
+          @InjectLink(value = "students", rel = "parent", style = ABSOLUTE),
+          @InjectLink(value = "students/{index}/grades", bindings = {@Binding(name = "index", value = "${instance.index}")}, rel = "grades", style = ABSOLUTE)
+  })
+  @XmlElement(name = "link")
+  @XmlElementWrapper(name = "links")
+  @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+  List<Link> links;
+
+  public Student() {
+//        this.index = this.generateNewIndex();
+  }
+
+  public Student(String firstName, String lastName, Date dateOfBirth) {
+//        initializeIndex();
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.dateOfBirth = dateOfBirth;
+  }
+
+
+  public void initializeIndex() {
+//        Datastore datastore = DatastoreHandlerUtil.getInstance().getDatastore();
+//        Query<Counter> query = datastore.find(Counter.class, "_id", "studentIndex");
+//        UpdateOperations<Counter> operation = datastore.createUpdateOperations(Counter.class).inc("seq");
+//        this.index = datastore.findAndModify(query, operation).getSeq();
+  }
+
+  @XmlTransient
+  public ObjectId getId() {
+    return id;
+  }
+
+  public int getIndex() {
+    return index;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public Date getDateOfBirth() {
+    return dateOfBirth;
+  }
+
+  public void setId(ObjectId id) {
+    this.id = id;
+  }
+
+  public void setIndex(int index) {
+    this.index = index;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public void setDateOfBirth(Date dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
+  }
+}
