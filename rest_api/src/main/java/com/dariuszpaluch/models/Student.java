@@ -35,7 +35,7 @@ public class Student extends Person {
         this.index = this.generateNewIndex();
     }
 
-    public Student(String name, String surname, Date dateOfBirth) {
+    public Student(String name, String surname, String dateOfBirth) {
         super(name, surname, dateOfBirth);
         this.index = this.generateNewIndex();
     }

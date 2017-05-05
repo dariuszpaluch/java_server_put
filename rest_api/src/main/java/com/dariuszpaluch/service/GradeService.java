@@ -3,10 +3,12 @@ package com.dariuszpaluch.service;
 import com.dariuszpaluch.dao.Context;
 import com.dariuszpaluch.dao.interfaces.IGradeDao;
 import com.dariuszpaluch.exception.DataNotFoundException;
+import com.dariuszpaluch.exception.WrongDateFormatException;
 import com.dariuszpaluch.exception.WrongGradeException;
 import com.dariuszpaluch.models.Course;
 import com.dariuszpaluch.models.Grade;
 import com.dariuszpaluch.models.Student;
+import com.dariuszpaluch.utils.DateValid;
 import com.dariuszpaluch.utils.GradeValid;
 
 import java.util.List;
@@ -54,9 +56,19 @@ public class GradeService implements IGradeDao {
     return result;
   }
 
+  private boolean validDate(Grade grade) {
+    boolean result = DateValid.dateValid(grade.getCreated());
+
+    if(!result) {
+      throw new WrongDateFormatException();
+    }
+
+    return true;
+  }
+
   @Override
   public boolean updateGrade(Grade grade, int id) {
-    if (this.validGrade(grade)) {
+    if (this.validGrade(grade) && this.validDate(grade)) {
 
       Course course = this.context.getCourses().getCourse(grade.getCourseId());
       Student student = this.context.getStudents().getStudent(grade.getStudentIndex());
@@ -86,7 +98,7 @@ public class GradeService implements IGradeDao {
 
   @Override
   public Grade addGrade(Grade grade) {
-    if (this.validGrade(grade)) {
+    if (this.validGrade(grade) && this.validDate(grade)) {
       Course course = this.context.getCourses().getCourse(grade.getCourseId());
       Student student = this.context.getStudents().getStudent(grade.getStudentIndex());
 

@@ -11,9 +11,9 @@ class Person {
     @NotNull
     private String surname;
     @NotNull
-    private Date dateOfBirth;
+    private String dateOfBirth;
 
-    Person(String name, String surname, Date dateOfBirth) {
+    Person(String name, String surname, String dateOfBirth) {
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
@@ -38,11 +38,11 @@ class Person {
         this.surname = surname;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 }
