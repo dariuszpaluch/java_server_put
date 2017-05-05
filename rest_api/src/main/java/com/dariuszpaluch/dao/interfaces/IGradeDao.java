@@ -12,5 +12,7 @@ public interface IGradeDao {
     public Grade getGrade(int id);
     public boolean updateGrade(Grade grade, int id);
     public boolean deleteGrade(int id);
+    public void deleteGradesByCourse(int courseId);
+    public void deleteGradesByStudent(int studentIndex);
     public Grade addGrade(Grade grade);
 }

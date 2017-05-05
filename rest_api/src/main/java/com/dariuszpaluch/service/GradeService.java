@@ -63,12 +63,12 @@ public class GradeService implements IGradeDao {
       throw new WrongDateFormatException();
     }
 
-    return true;
+    return result;
   }
 
   @Override
   public boolean updateGrade(Grade grade, int id) {
-    if (this.validGrade(grade) && this.validDate(grade)) {
+    if (this.validGrade(grade)) {
 
       Course course = this.context.getCourses().getCourse(grade.getCourseId());
       Student student = this.context.getStudents().getStudent(grade.getStudentIndex());
@@ -97,8 +97,19 @@ public class GradeService implements IGradeDao {
   }
 
   @Override
+  public void deleteGradesByCourse(int courseId) {
+    this.context.getGrades().deleteGradesByCourse(courseId);
+  }
+
+  @Override
+  public void deleteGradesByStudent(int studentIndex) {
+    this.context.getGrades().deleteGradesByCourse(studentIndex);
+
+  }
+
+  @Override
   public Grade addGrade(Grade grade) {
-    if (this.validGrade(grade) && this.validDate(grade)) {
+    if (this.validGrade(grade)) {
       Course course = this.context.getCourses().getCourse(grade.getCourseId());
       Student student = this.context.getStudents().getStudent(grade.getStudentIndex());
 
