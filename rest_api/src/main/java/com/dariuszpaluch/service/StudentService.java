@@ -16,7 +16,7 @@ public class StudentService implements IStudentDao {
     }
 
     @Override
-    public Student getStudent(String index) {
+    public Student getStudent(int index) {
         Student student = this.context.getStudents().getStudent(index);
 
         if(student == null) {
@@ -27,7 +27,7 @@ public class StudentService implements IStudentDao {
     }
 
     @Override
-    public boolean updateStudent(Student student, String index) {
+    public boolean updateStudent(Student student, int index) {
         boolean result = this.context.getStudents().updateStudent(student, index);
 
         if(!result) {
@@ -38,7 +38,7 @@ public class StudentService implements IStudentDao {
     }
 
     @Override
-    public boolean deleteStudent(String index) {
+    public boolean deleteStudent(int index) {
         boolean result = this.context.getStudents().deleteStudent(index);
 
         if(!result) {

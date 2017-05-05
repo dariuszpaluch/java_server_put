@@ -25,9 +25,9 @@ public class StudentDaoImpl implements IStudentDao {
     }
 
     @Override
-    public Student getStudent(String index) {
+    public Student getStudent(int index) {
         for(Student item : students) {
-            if(item.getIndex().equals(index)) {
+            if(item.getIndex() == index) {
                 return item;
             }
         }
@@ -36,9 +36,9 @@ public class StudentDaoImpl implements IStudentDao {
     }
 
     @Override
-    public boolean updateStudent(Student student, String index) {
+    public boolean updateStudent(Student student, int index) {
         for(Student item: students) {
-            if(item.getIndex().equals(index)) {
+            if(item.getIndex() == index) {
                 item.setName(student.getName());
                 item.setDateOfBirth(student.getDateOfBirth());
                 item.setSurname(student.getSurname());
@@ -50,9 +50,9 @@ public class StudentDaoImpl implements IStudentDao {
     }
 
     @Override
-    public boolean deleteStudent(String index) {
+    public boolean deleteStudent(int index) {
         for(Student item : students) {
-            if(item.getIndex().equals(index)) {
+            if(item.getIndex() == index) {
                 students.remove(item);
                 return true;
             }
