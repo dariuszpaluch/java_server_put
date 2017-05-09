@@ -109,6 +109,7 @@ public class GradeService implements IGradeDao {
 
   @Override
   public Grade addGrade(Grade grade) {
+
     if (this.validGrade(grade)) {
       Course course = this.context.getCourses().getCourse(grade.getCourseId());
       Student student = this.context.getStudents().getStudent(grade.getStudentIndex());

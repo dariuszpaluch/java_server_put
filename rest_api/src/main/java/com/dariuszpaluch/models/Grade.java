@@ -52,6 +52,15 @@ public class Grade {
 
     }
 
+    public Grade(Double value, String created, int courseId, int studentIndex, int id) {
+        this.value = value;
+        this.created = created;
+        this.courseId = courseId;
+        this.studentIndex = studentIndex;
+        this.id = id;
+
+    }
+
     public Double getValue() {
         return value;
     }

@@ -40,7 +40,7 @@ public class GradeResource {
 
         for (Grade item : grades) {
             Course course = courseService.getCourse(item.getCourseId());
-            result.add(new GradeView(item, course.getName(), student.getName()));
+            result.add(new GradeView(item, course, student));
         }
 
         return result;
@@ -48,6 +48,7 @@ public class GradeResource {
 
     @POST
     public Response postGrade(@NotNull Grade grade, @PathParam("index") final int index, @Context UriInfo uriInfo) {
+//        Grade grade = new Grade(gradeView.getValue(), gradeView.getCreated(), gradeView.getCourse().getId(), gradeView.getStudent().getIndex(), gradeView.getId());
         Student student = studentService.getStudent(index);
         Course course = courseService.getCourse(grade.getCourseId());
 
@@ -57,12 +58,14 @@ public class GradeResource {
         int newId = newGrade.getId();
         URI uri = uriInfo.getAbsolutePathBuilder().path(Integer.toString(newId)).build();
 
-        return Response.created(uri).entity(new GradeView(newGrade, course.getName(), course.getName())).build();
+        return Response.created(uri).entity(new GradeView(newGrade, course, student)).build();
     }
 
     @PUT
     @Path("/{id}")
     public Response put(@NotNull Grade grade, @PathParam("index") final int index, @PathParam("id") final int id) {
+//        Grade grade = new Grade(gradeView.getValue(), gradeView.getCreated(), gradeView.getCourse().getId(), gradeView.getStudent().getIndex(), gradeView.getId());
+
         Student student = studentService.getStudent(index);
         grade.setStudentIndex(index);
         gradeService.updateGrade(grade, id);
@@ -86,6 +89,6 @@ public class GradeResource {
         Student student = studentService.getStudent(grade.getStudentIndex());
         Course course = courseService.getCourse(grade.getCourseId());
 
-        return Response.ok().entity(new GradeView(grade, course.getName(), student.getName())).build();
+        return Response.ok().entity(new GradeView(grade, course, student)).build();
     }
 }
