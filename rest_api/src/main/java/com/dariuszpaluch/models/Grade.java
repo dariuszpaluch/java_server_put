@@ -10,8 +10,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
@@ -25,12 +23,12 @@ public class Grade {
     @NotNull
     private Double value;
     @NotNull
-    private Date created;
+    private String created;
 
     @NotNull
     private int courseId;
     @NotNull
-    private String studentIndex;
+    private int studentIndex;
 
     @InjectLinks({
             @InjectLink(value = "students/{index}/grades/{id}", bindings = {@Binding(name = "id", value = "${instance.id}"), @Binding(name = "index", value = "${instance.studentIndex}")}, rel = "self", style = ABSOLUTE),
@@ -45,7 +43,7 @@ public class Grade {
         this.id = generateNewId();
     }
 
-    public Grade(Double value, Date created, int courseId, String studentIndex) {
+    public Grade(Double value, String created, int courseId, int studentIndex) {
         this.value = value;
         this.created = created;
         this.courseId = courseId;
@@ -62,11 +60,11 @@ public class Grade {
         this.value = value;
     }
 
-    public Date getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(Date created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
@@ -78,11 +76,11 @@ public class Grade {
         this.courseId = courseId;
     }
 
-    public String getStudentIndex() {
+    public int getStudentIndex() {
         return studentIndex;
     }
 
-    public void setStudentIndex(String studentIndex) {
+    public void setStudentIndex(int studentIndex) {
         this.studentIndex = studentIndex;
     }
 

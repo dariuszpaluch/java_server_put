@@ -17,8 +17,9 @@ import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
 
 @XmlRootElement
 public class Student extends Person {
-    @NotNull
-    private String index;
+    private static int indexCounter = 0;
+
+    private int index;
 
     @InjectLinks({
             @InjectLink(value = "students/{index}", bindings = {@Binding(name = "index", value = "${instance.index}")}, rel = "self", style = ABSOLUTE),
@@ -31,18 +32,20 @@ public class Student extends Person {
     List<Link> links;
 
     public Student() {
+        this.index = this.generateNewIndex();
     }
 
-    public Student(String name, String surname, Date dateOfBirth, String index) {
+    public Student(String name, String surname, String dateOfBirth) {
         super(name, surname, dateOfBirth);
-        this.index = index;
+        this.index = this.generateNewIndex();
     }
 
-    public String getIndex() {
+    public int getIndex() {
         return index;
     }
 
-    public void setIndex(String index) {
-        this.index = index;
+    private int generateNewIndex() {
+        indexCounter += 1;
+        return indexCounter;
     }
 }

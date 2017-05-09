@@ -25,15 +25,15 @@ public class Context {
         dataCourses.add(course2);
 
         List<Student> dataStudents = new ArrayList<Student>();
-        Student student1 = new Student("Dariusz", "Paluch", new Date(), "123456789");
-        Student student2 = new Student("Adam", "Nowak", new Date(), "123456789");
+        Student student1 = new Student("Dariusz", "Paluch", "10-03-1994");
+        Student student2 = new Student("Adam", "Nowak", "08-03-1992");
         dataStudents.add(student1);
         dataStudents.add(student2);
 
         List<Grade> dataGrades = new ArrayList<Grade>();
-        Grade grade1 = new Grade(2.5, new Date(), course1.getId(), student1.getIndex());
-        Grade grade2 = new Grade(5.0, new Date(), course2.getId(), student1.getIndex());
-        Grade grade3 = new Grade(4.5, new Date(), course1.getId(), student2.getIndex());
+        Grade grade1 = new Grade(2.5, "05-03-2015", course1.getId(), student1.getIndex());
+        Grade grade2 = new Grade(5.0, "05-05-2015", course2.getId(), student1.getIndex());
+        Grade grade3 = new Grade(4.5, "05-08-2015", course1.getId(), student2.getIndex());
         dataGrades.add(grade1);
         dataGrades.add(grade2);
         dataGrades.add(grade3);
@@ -41,6 +41,7 @@ public class Context {
         courses = new CourseDaoImpl(dataCourses);
         grades = new GradeDaoImpl(dataGrades);
         students = new StudentDaoImpl(dataStudents);
+        System.out.println(dataStudents.size());
     }
 
     public static Context getInstance()

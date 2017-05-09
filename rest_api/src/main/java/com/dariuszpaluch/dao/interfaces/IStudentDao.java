@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface IStudentDao {
     public List<Student> getAllStudents();
-    public Student getStudent(String index);
-    public boolean updateStudent(Student student, String index);
-    public boolean deleteStudent(String index);
+    public Student getStudent(int index);
+    public boolean updateStudent(Student student, int index);
+    public boolean deleteStudent(int index);
     public Student addStudent(Student student);
 }
