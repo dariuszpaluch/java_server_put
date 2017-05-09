@@ -87,6 +87,28 @@ public class GradeDaoImpl implements IGradeDao{
         return  false;
     }
 
+    public void deleteGradesByCourse(int courseId) {
+        List<Grade> tempList = new ArrayList<>(grades);
+        for(Grade item : grades) {
+            if(item.getCourseId() == courseId) {
+                tempList.remove(item);
+            }
+        }
+
+        grades = tempList;
+    }
+
+    public void deleteGradesByStudent(int studentIndex) {
+        List<Grade> tempList = new ArrayList<>(grades);
+        for(Grade item : grades) {
+            if(item.getStudentIndex() == studentIndex) {
+                tempList.remove(item);
+            }
+        }
+
+        grades = tempList;
+    }
+
     @Override
     public Grade addGrade(Grade grade) {
         grades.add(grade);

@@ -45,6 +45,8 @@ public class CourseService implements ICourseDao {
             throw new DataNotFoundException("Course with id " + id + " not found");
         }
 
+        this.context.getGrades().deleteGradesByCourse(id);
+
         return true;
     }
 

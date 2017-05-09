@@ -18,17 +18,17 @@ import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
 public class Grade {
     private static int idCounter = 0;
     @NotNull
-    private int id;
+    protected int id;
 
     @NotNull
-    private Double value;
+    protected Double value;
     @NotNull
-    private String created;
+    protected String created;
 
     @NotNull
-    private int courseId;
+    protected int courseId;
     @NotNull
-    private int studentIndex;
+    protected int studentIndex;
 
     @InjectLinks({
             @InjectLink(value = "students/{index}/grades/{id}", bindings = {@Binding(name = "id", value = "${instance.id}"), @Binding(name = "index", value = "${instance.studentIndex}")}, rel = "self", style = ABSOLUTE),
@@ -49,6 +49,15 @@ public class Grade {
         this.courseId = courseId;
         this.studentIndex = studentIndex;
         this.id = generateNewId();
+
+    }
+
+    public Grade(Double value, String created, int courseId, int studentIndex, int id) {
+        this.value = value;
+        this.created = created;
+        this.courseId = courseId;
+        this.studentIndex = studentIndex;
+        this.id = id;
 
     }
 

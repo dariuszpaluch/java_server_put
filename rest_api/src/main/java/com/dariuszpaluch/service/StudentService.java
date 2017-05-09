@@ -63,6 +63,8 @@ public class StudentService implements IStudentDao {
             throw new DataNotFoundException("Student with index " + index + " not found");
         }
 
+        this.context.getGrades().deleteGradesByStudent(index);
+
         return true;
     }
 
