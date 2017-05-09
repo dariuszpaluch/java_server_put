@@ -1,8 +1,12 @@
 package com.dariuszpaluch.models;
 
+import com.dariuszpaluch.utils.ObjectIdJaxbAdapter;
+import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
@@ -15,11 +19,12 @@ import java.util.List;
 
 import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
 
+@Entity("courses")
 @XmlRootElement
 public class Course {
-    private static int idCounter = 0;
-    @NotNull
-    private int id;
+    @Id
+    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+    private ObjectId id;
 
     @NotNull
     private String name;
@@ -37,11 +42,9 @@ public class Course {
     List<Link> links;
 
     public Course() {
-        this.id = generateNewId();
     }
 
     public Course(String name, String teacher) {
-        this.id = generateNewId();
         this.name = name;
         this.teacher = teacher;
     }
@@ -62,12 +65,12 @@ public class Course {
         this.teacher = teacher;
     }
 
-    public int getId() {
+
+    public ObjectId getId() {
         return id;
     }
 
-    private int generateNewId() {
-        idCounter +=1;
-        return idCounter;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 }

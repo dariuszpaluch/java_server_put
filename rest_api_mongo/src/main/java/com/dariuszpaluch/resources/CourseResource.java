@@ -34,46 +34,46 @@ public class CourseResource {
         return Response.ok(courseService.getAllCourse()).build();
     }
 
-    @GET
-    @Path("/{index}")
-    public Response get(@PathParam("index") final int id) {
-        Course result = courseService.getCourse(id);
-
-        return Response.ok(result).build();
-    }
-
-    @GET
-    @Path("/{index}/grades")
-    public Response getGrades(@PathParam("index") final int id) {
-        return Response.ok(gradeService.getCourseGrade(id)).build();
-    }
-
-
-    @POST
-    public Response post(@NotNull Course course, @Context UriInfo uriInfo) {
-        Course newCourse = courseService.addCourse(course);
-
-        int newId = newCourse.getId();
-        URI uri = uriInfo.getAbsolutePathBuilder().path(Integer.toString(newId)).build();
-
-        return Response.created(uri).entity(newCourse).build();
-    }
-
-    @PUT
-    @Path("/{index}")
-    public Response put(@NotNull Course course, @PathParam("index") final int id) {
-        courseService.updateCourse(course, id);
-
-        return Response.ok().build();
-    }
-
-    @DELETE
-    @Path("/{index}")
-    public Response delete(@PathParam("index") final int id) {
-        courseService.deleteCourse(id);
-
-        return Response.ok().build();
-    }
+//    @GET
+//    @Path("/{index}")
+//    public Response get(@PathParam("index") final int id) {
+//        Course result = courseService.getCourse(id);
+//
+//        return Response.ok(result).build();
+//    }
+//
+//    @GET
+//    @Path("/{index}/grades")
+//    public Response getGrades(@PathParam("index") final int id) {
+//        return Response.ok(gradeService.getCourseGrade(id)).build();
+//    }
+//
+//
+//    @POST
+//    public Response post(@NotNull Course course, @Context UriInfo uriInfo) {
+//        Course newCourse = courseService.addCourse(course);
+//
+//        int newId = newCourse.getId();
+//        URI uri = uriInfo.getAbsolutePathBuilder().path(Integer.toString(newId)).build();
+//
+//        return Response.created(uri).entity(newCourse).build();
+//    }
+//
+//    @PUT
+//    @Path("/{index}")
+//    public Response put(@NotNull Course course, @PathParam("index") final int id) {
+//        courseService.updateCourse(course, id);
+//
+//        return Response.ok().build();
+//    }
+//
+//    @DELETE
+//    @Path("/{index}")
+//    public Response delete(@PathParam("index") final int id) {
+//        courseService.deleteCourse(id);
+//
+//        return Response.ok().build();
+//    }
 
 
 }

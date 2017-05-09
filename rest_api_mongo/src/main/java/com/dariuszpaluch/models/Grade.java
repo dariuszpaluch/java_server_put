@@ -1,8 +1,13 @@
 package com.dariuszpaluch.models;
 
+import com.dariuszpaluch.utils.ObjectIdJaxbAdapter;
+import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
@@ -10,17 +15,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
 
+@Entity("grades")
 @XmlRootElement
 public class Grade {
-    private static int idCounter = 0;
-    @NotNull
-    private int id;
+    @Id
+    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+    private ObjectId id;
 
     @NotNull
     private Double value;
@@ -28,9 +33,12 @@ public class Grade {
     private Date created;
 
     @NotNull
-    private int courseId;
+    @Reference
+    private Student student;
+
     @NotNull
-    private int studentIndex;
+    @Reference
+    private Course course;
 
     @InjectLinks({
             @InjectLink(value = "students/{index}/grades/{id}", bindings = {@Binding(name = "id", value = "${instance.id}"), @Binding(name = "index", value = "${instance.studentIndex}")}, rel = "self", style = ABSOLUTE),
@@ -42,16 +50,21 @@ public class Grade {
     List<Link> links;
 
     public Grade() {
-        this.id = generateNewId();
     }
 
-    public Grade(Double value, Date created, int courseId, int studentIndex) {
+    public Grade(Double value, Date created, Course course, Student student) {
         this.value = value;
         this.created = created;
-        this.courseId = courseId;
-        this.studentIndex = studentIndex;
-        this.id = generateNewId();
+        this.student = student;
+        this.course = course;
+    }
 
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public Double getValue() {
@@ -70,28 +83,19 @@ public class Grade {
         this.created = created;
     }
 
-    public int getCourseId() {
-        return courseId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public int getStudentIndex() {
-        return studentIndex;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setStudentIndex(int studentIndex) {
-        this.studentIndex = studentIndex;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    private int generateNewId() {
-        idCounter += 1;
-        return idCounter;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }

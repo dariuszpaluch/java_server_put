@@ -1,4 +1,4 @@
-package com.dariuszpaluch.models;
+package com.dariuszpaluch.utils;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

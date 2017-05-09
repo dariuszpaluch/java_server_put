@@ -1,8 +1,7 @@
 package com.dariuszpaluch.exception;
 
-import com.dariuszpaluch.models.ErrorMessage;
+import com.dariuszpaluch.utils.ErrorMessage;
 
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;

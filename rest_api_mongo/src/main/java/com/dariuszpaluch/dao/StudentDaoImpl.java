@@ -11,43 +11,43 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class StudentDaoImpl implements IStudentDao{
+public class StudentDaoImpl {
 
-    private List<Student> students;
-
-    public StudentDaoImpl() {
-        students = new ArrayList<Student>();
-    }
-
-    public StudentDaoImpl(List<Student> students) {
-        this.students = students;
-    }
-
-    public List<Student> getAllStudents() {
-        Datastore datastore = DatastoreHandlerUtil.getInstance().getDatastore();
-
-        return  datastore.find(Student.class).asList();
-    }
-
-    @Override
-    public Student getStudent(int index) {
-        return null;
-    }
-
-    @Override
-    public boolean updateStudent(Student student, int index) {
-        return false;
-    }
-
-    @Override
-    public boolean deleteStudent(int index) {
-        return false;
-    }
-
-    @Override
-    public Student addStudent(Student student) {
-        return null;
-    }
+//    private List<Student> students;
+//
+//    public StudentDaoImpl() {
+//        students = new ArrayList<Student>();
+//    }
+//
+//    public StudentDaoImpl(List<Student> students) {
+//        this.students = students;
+//    }
+//
+//    public List<Student> getAllStudents() {
+//        Datastore datastore = DatastoreHandlerUtil.getInstance().getDatastore();
+//
+//        return  datastore.find(Student.class).asList();
+//    }
+//
+//    @Override
+//    public Student getStudent(int index) {
+//        return null;
+//    }
+//
+//    @Override
+//    public boolean updateStudent(Student student, int index) {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean deleteStudent(int index) {
+//        return false;
+//    }
+//
+//    @Override
+//    public Student addStudent(Student student) {
+//        return null;
+//    }
 //
 //    @Override
 //    public Student getStudent(int index) {

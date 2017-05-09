@@ -1,17 +1,13 @@
 package com.dariuszpaluch.models;
 
-import com.dariuszpaluch.utils.DatastoreHandlerUtil;
+import com.dariuszpaluch.utils.ObjectIdJaxbAdapter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
-import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.annotations.*;
-import org.mongodb.morphia.query.Query;
-import org.mongodb.morphia.query.UpdateOperations;
 
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlElement;
@@ -21,21 +17,21 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
 
-
+@Entity("students")
 @XmlRootElement
 public class Student {
+  private static int indexCounter = 0;
+
   @XmlTransient
   @Id
+  @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
   private ObjectId id;
 
   @Indexed(name = "index", unique = true)
   private int index;
-
-  private static int indexCounter = 0;
 
   @NotNull
   private String firstName;
@@ -59,27 +55,23 @@ public class Student {
   List<Link> links;
 
   public Student() {
-//        this.index = this.generateNewIndex();
   }
 
   public Student(String firstName, String lastName, Date dateOfBirth) {
-//        initializeIndex();
+    this.index = generateNewIndex();
     this.firstName = firstName;
     this.lastName = lastName;
     this.dateOfBirth = dateOfBirth;
   }
 
 
-  public void initializeIndex() {
-//        Datastore datastore = DatastoreHandlerUtil.getInstance().getDatastore();
-//        Query<Counter> query = datastore.find(Counter.class, "_id", "studentIndex");
-//        UpdateOperations<Counter> operation = datastore.createUpdateOperations(Counter.class).inc("seq");
-//        this.index = datastore.findAndModify(query, operation).getSeq();
-  }
-
   @XmlTransient
   public ObjectId getId() {
     return id;
+  }
+
+  public void setId(ObjectId id) {
+    this.id = id;
   }
 
   public int getIndex() {
@@ -98,10 +90,6 @@ public class Student {
     return dateOfBirth;
   }
 
-  public void setId(ObjectId id) {
-    this.id = id;
-  }
-
   public void setIndex(int index) {
     this.index = index;
   }
@@ -116,5 +104,10 @@ public class Student {
 
   public void setDateOfBirth(Date dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
+  }
+
+  private int generateNewIndex() {
+    indexCounter += 1;
+    return indexCounter;
   }
 }
