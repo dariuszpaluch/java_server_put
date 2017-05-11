@@ -41,8 +41,9 @@ public class Grade {
     private Course course;
 
     @InjectLinks({
-            @InjectLink(value = "students/{index}/grades/{id}", bindings = {@Binding(name = "id", value = "${instance.id}"), @Binding(name = "index", value = "${instance.studentIndex}")}, rel = "self", style = ABSOLUTE),
-            @InjectLink(value = "students/{index}/grades", bindings = {@Binding(name = "index", value = "${instance.studentIndex}")}, rel = "parent", style = ABSOLUTE),
+            @InjectLink(value = "students/{index}/grades/{id}", bindings = {@Binding(name = "id", value = "${instance.id}"), @Binding(name = "index", value = "${instance.student.index}")}, rel = "self", style = ABSOLUTE),
+            @InjectLink(value = "students/{index}/grades", bindings = {@Binding(name = "index", value = "${instance.student.index}")}, rel = "parent", style = ABSOLUTE),
+
     })
     @XmlElement(name = "link")
     @XmlElementWrapper(name = "links")

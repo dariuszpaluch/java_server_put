@@ -19,7 +19,7 @@ public class Server {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        URI baseUri = UriBuilder.fromUri("http://localhost").port(9998).build();
+        URI baseUri = UriBuilder.fromUri("http://localhost").port(9999).build();
 
         ResourceConfig config = new ResourceConfig().packages("com.dariuszpaluch").registerClasses(
                 DeclarativeLinkingFeature.class

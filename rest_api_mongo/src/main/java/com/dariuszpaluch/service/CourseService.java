@@ -9,7 +9,6 @@ import com.dariuszpaluch.models.Course;
 import java.util.List;
 
 public class CourseService implements ICourseDao{
-    private final Context context = Context.getInstance();
     private final CourseDaoImpl coursesDao = new CourseDaoImpl();
 
     @Override
