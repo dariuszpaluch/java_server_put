@@ -2,8 +2,10 @@ package com.dariuszpaluch.dao;
 
 import com.dariuszpaluch.dao.interfaces.ICourseDao;
 import com.dariuszpaluch.models.Course;
+import com.dariuszpaluch.models.Student;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +14,14 @@ public class CourseDaoImpl implements ICourseDao {
   private Datastore datastore = Context.getInstance().getDatastore();
 
   @Override
-  public List<Course> getAllCourse() {
-    return datastore.find(Course.class).asList();
+  public List<Course> getAllCourse(String teacher) {
+    Query<Course> query = this.datastore.createQuery(Course.class);
+
+    if(teacher != null ) {
+      query.filter("teacher ==", teacher);
+    }
+
+    return query.asList();
 
   }
 

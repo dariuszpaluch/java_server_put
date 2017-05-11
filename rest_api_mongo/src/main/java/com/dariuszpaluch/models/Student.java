@@ -30,6 +30,7 @@ public class Student {
   @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
   private ObjectId id;
 
+  @XmlElement(name="index")
   @Indexed(name = "index", unique = true)
   private int index;
 
@@ -39,6 +40,7 @@ public class Student {
   @NotNull
   private String lastName;
 
+  @NotNull
   @JsonFormat(shape = JsonFormat.Shape.STRING,
           pattern = "yyyy-MM-dd", timezone = "CET")
   private Date dateOfBirth;
@@ -58,6 +60,12 @@ public class Student {
 
   public Student(String firstName, String lastName, Date dateOfBirth) {
     this.index = generateNewIndex();
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.dateOfBirth = dateOfBirth;
+  }
+  public Student(int index, String firstName, String lastName, Date dateOfBirth) {
+    this.index = index;
     this.firstName = firstName;
     this.lastName = lastName;
     this.dateOfBirth = dateOfBirth;
@@ -105,7 +113,7 @@ public class Student {
     this.dateOfBirth = dateOfBirth;
   }
 
-  private int generateNewIndex() {
+  private static int generateNewIndex() {
     indexCounter += 1;
     return indexCounter;
   }

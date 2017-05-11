@@ -20,8 +20,28 @@ public class GradeDaoImpl implements IGradeDao {
   }
 
   @Override
-  public List<Grade> getStudentGrade(Student student) {
-    return this.datastore.createQuery(Grade.class).filter("student", student).asList();
+  public List<Grade> getStudentGrade(Student student, Course course, int compareType, int compareValue) {
+    Query<Grade> query = this.datastore.createQuery(Grade.class).filter("student", student);
+
+    if(course != null ) {
+      query.filter("course", course);
+    }
+
+    if(compareValue > 0) {
+      switch (compareType) {
+        case 0:
+          query.filter("value <", compareValue);
+          break;
+        case 1:
+          query.filter("value ==", compareValue);
+          break;
+        case 2:
+          query.filter("value >", compareValue);
+          break;
+      }
+    }
+
+    return query.asList();
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.dariuszpaluch.resources;
 
 
+import com.dariuszpaluch.dao.CounterDao;
 import com.dariuszpaluch.models.Grade;
 import com.dariuszpaluch.models.Student;
 import com.dariuszpaluch.service.GradeService;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.Date;
 
 /**
  * Student resource (exposed at "students" path)
@@ -28,8 +30,14 @@ public class StudentResource {
   }
 
   @GET
-  public Response getAll() {
-    return Response.ok(studentService.getAllStudents()).build();
+  public Response getAll(
+    @QueryParam("firstName") String firstName,
+    @QueryParam("lastName") String lastName,
+    @QueryParam("dateOfBirth") Date dateOfBirth,
+    @DefaultValue("0")  @QueryParam("dateOfBirthCompareType") int dateOfBirthCompareType //0 '<', 1 '=', 2 '>'
+  ) {
+
+    return Response.ok(studentService.getAllStudents(firstName, lastName, dateOfBirth, dateOfBirthCompareType)).build();
   }
 
 
@@ -45,6 +53,7 @@ public class StudentResource {
   @POST
   public Response post(Student student, @Context UriInfo uriInfo) {
     Student newStudent = studentService.addStudent(student);
+
 
     int newIndex = newStudent.getIndex();
     URI uri = uriInfo.getAbsolutePathBuilder().path(Integer.toString(newIndex)).build();

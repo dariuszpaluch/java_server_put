@@ -32,10 +32,19 @@ public class GradeResource {
   }
 
   @GET
-  public List<Grade> getGrades(@PathParam("index") final int index) {
+  public List<Grade> getGrades(
+          @PathParam("index") final int index,
+          @QueryParam("courseId") String courseId,
+          @DefaultValue("0") @QueryParam("compareValueType") int compareType, //0 '<', 1 '=', 2 '>'
+          @DefaultValue("0") @QueryParam("compareValue") int compareValue
+  ) {
     Student student = studentService.getStudent(index);
+    Course course = null;
+    if(courseId != null) {
+      course = courseService.getCourse(courseId);
+    }
 
-    return gradeService.getStudentGrade(student);
+    return gradeService.getStudentGrade(student, course, compareType, compareValue);
   }
 
   @POST

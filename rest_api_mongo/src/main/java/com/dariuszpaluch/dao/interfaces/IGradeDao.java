@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IGradeDao {
     public List<Grade> getAllGrades();
-    public List<Grade> getStudentGrade(Student student);
+    public List<Grade> getStudentGrade(Student student, Course course, int compareType, int compareValue);
     public List<Grade> getCourseGrade(Course course);
     public Grade getGrade(String id);
     public boolean updateGrade(Grade grade, String id);

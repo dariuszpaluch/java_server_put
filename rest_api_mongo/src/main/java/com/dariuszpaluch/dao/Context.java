@@ -3,6 +3,7 @@ package com.dariuszpaluch.dao;
 import com.dariuszpaluch.dao.interfaces.ICourseDao;
 import com.dariuszpaluch.dao.interfaces.IGradeDao;
 import com.dariuszpaluch.dao.interfaces.IStudentDao;
+import com.dariuszpaluch.models.Counter;
 import com.dariuszpaluch.models.Course;
 import com.dariuszpaluch.models.Grade;
 import com.dariuszpaluch.models.Student;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class Context {
   private static Context instance;
-//  private ICourseDao courses;
+  //  private ICourseDao courses;
 //  private IGradeDao grades;
 //  private IStudentDao students;
   private final Datastore datastore;
@@ -30,19 +31,25 @@ public class Context {
     morphia.mapPackage("com.dariuszpaluch.models");
     datastore = morphia.createDatastore(new MongoClient("localhost", 8004), "morphia_example");
     datastore.ensureIndexes();
+  }
 
+  public void initialize() {
+    CounterDao counterDao = new CounterDao();
 
-    if(datastore.getCount(Student.class) == 0) {
+    if (datastore.getCount(Student.class) == 0) {
+      Counter counter = new Counter("students");
+      datastore.save(counter);
+
       List<Student> dataStudents = new ArrayList<Student>();
-      Student student1 = new Student("Dariusz", "Paluch", new Date());
-      Student student2 = new Student("Adam", "Nowak", new Date());
+      Student student1 = new Student(counterDao.getSeq("students"), "Dariusz", "Paluch", new Date());
+      Student student2 = new Student(counterDao.getSeq("students"), "Adam", "Nowak", new Date());
       dataStudents.add(student1);
       dataStudents.add(student2);
 
       datastore.save(dataStudents);
     }
 
-    if(datastore.getCount(Course.class) == 0) {
+    if (datastore.getCount(Course.class) == 0) {
       List<Course> dataCourses = new ArrayList<Course>();
       Course course1 = new Course("Analiza Matematyczna", "J. Węglarz");
       Course course2 = new Course("Matematyka Dyskretna", "M. Nowak");
@@ -51,7 +58,7 @@ public class Context {
       datastore.save(dataCourses);
     }
 
-    if(datastore.getCount(Grade.class) == 0) {
+    if (datastore.getCount(Grade.class) == 0) {
       List<Grade> dataGrades = new ArrayList<Grade>();
       Grade grade1 = new Grade(2.5, new Date(), datastore.find(Course.class).asList().get(0), datastore.find(Student.class).asList().get(0));
       Grade grade2 = new Grade(5.0, new Date(), datastore.find(Course.class).asList().get(0), datastore.find(Student.class).asList().get(0));

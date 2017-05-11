@@ -4,11 +4,15 @@ import com.dariuszpaluch.dao.Context;
 import com.dariuszpaluch.dao.GradeDaoImpl;
 import com.dariuszpaluch.dao.interfaces.IGradeDao;
 import com.dariuszpaluch.exception.DataNotFoundException;
+import com.dariuszpaluch.exception.WrongCompareTypeException;
+import com.dariuszpaluch.exception.WrongCreatedDateException;
 import com.dariuszpaluch.exception.WrongGradeException;
 import com.dariuszpaluch.models.Course;
 import com.dariuszpaluch.models.Grade;
 import com.dariuszpaluch.models.Student;
+import com.dariuszpaluch.utils.BeforeDateValid;
 import com.dariuszpaluch.utils.GradeValid;
+import com.dariuszpaluch.utils.ValidCompareType;
 
 import java.util.List;
 
@@ -21,8 +25,19 @@ public class GradeService implements IGradeDao {
   }
 
   @Override
-  public List<Grade> getStudentGrade(Student student) {
-    return this.gradeDao.getStudentGrade(student);
+  public List<Grade> getStudentGrade(Student student, Course course, int compareType, int compareValue) {
+    if (compareValue > 0) {
+      if (!ValidCompareType.valid(compareType)) {
+        throw new WrongCompareTypeException();
+      }
+
+//      boolean result = GradeValid.gradeValue(compareValue);
+//      if (!result) {
+//        throw new WrongGradeException("Nieprawidłowa wartość oceny do porównania");
+//      }
+    }
+
+    return this.gradeDao.getStudentGrade(student, course, compareType, compareValue);
   }
 
   @Override
@@ -44,11 +59,15 @@ public class GradeService implements IGradeDao {
 
   private boolean validGrade(Grade grade) {
     boolean result = GradeValid.gradeValue(grade.getValue());
+    boolean created = BeforeDateValid.valid(grade.getCreated());
+    if(!created) {
+      throw new WrongCreatedDateException();
+    }
     if (!result) {
       throw new WrongGradeException();
     }
 
-    return result;
+    return true;
   }
 
   @Override

@@ -5,4 +5,8 @@ public class WrongGradeException extends RuntimeException {
   public WrongGradeException() {
     super("Nieprawidłowa wartość oceny");
   }
+
+  public WrongGradeException(String message) {
+    super(message);
+  }
 }

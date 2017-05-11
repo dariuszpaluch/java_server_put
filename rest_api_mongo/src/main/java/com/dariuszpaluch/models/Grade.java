@@ -1,6 +1,7 @@
 package com.dariuszpaluch.models;
 
 import com.dariuszpaluch.utils.ObjectIdJaxbAdapter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
 import java.util.List;
@@ -23,80 +25,84 @@ import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
 @Entity("grades")
 @XmlRootElement
 public class Grade {
-    @Id
-    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
-    private ObjectId id;
+  @Id
+  @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+  private ObjectId id;
 
-    @NotNull
-    private Double value;
-    @NotNull
-    private Date created;
+  @NotNull
+  private Double value;
 
-    @NotNull
-    @Reference
-    private Student student;
+  @NotNull
+  @JsonFormat(shape = JsonFormat.Shape.STRING,
+          pattern = "yyyy-MM-dd", timezone = "CET")
+  private Date created;
 
-    @NotNull
-    @Reference
-    private Course course;
+  @NotNull
+  @Reference
+  private Student student;
 
-    @InjectLinks({
-            @InjectLink(value = "students/{index}/grades/{id}", bindings = {@Binding(name = "id", value = "${instance.id}"), @Binding(name = "index", value = "${instance.student.index}")}, rel = "self", style = ABSOLUTE),
-            @InjectLink(value = "students/{index}/grades", bindings = {@Binding(name = "index", value = "${instance.student.index}")}, rel = "parent", style = ABSOLUTE),
+  @NotNull
+  @Reference
+  private Course course;
 
-    })
-    @XmlElement(name = "link")
-    @XmlElementWrapper(name = "links")
-    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    List<Link> links;
+  @InjectLinks({
+          @InjectLink(value = "students/{index}/grades/{id}", bindings = {@Binding(name = "id", value = "${instance.id}"), @Binding(name = "index", value = "${instance.student.index}")}, rel = "self", style = ABSOLUTE),
+          @InjectLink(value = "students/{index}/grades", bindings = {@Binding(name = "index", value = "${instance.student.index}")}, rel = "parent", style = ABSOLUTE),
 
-    public Grade() {
-    }
+  })
+  @XmlElement(name = "link")
+  @XmlElementWrapper(name = "links")
+  @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+  List<Link> links;
 
-    public Grade(Double value, Date created, Course course, Student student) {
-        this.value = value;
-        this.created = created;
-        this.student = student;
-        this.course = course;
-    }
+  public Grade() {
+  }
 
-    public ObjectId getId() {
-        return id;
-    }
+  public Grade(Double value, Date created, Course course, Student student) {
+    this.value = value;
+    this.created = created;
+    this.student = student;
+    this.course = course;
+  }
 
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
+  @XmlTransient
+  public ObjectId getId() {
+    return id;
+  }
 
-    public Double getValue() {
-        return value;
-    }
+  public void setId(ObjectId id) {
+    this.id = id;
+  }
 
-    public void setValue(Double value) {
-        this.value = value;
-    }
+  public Double getValue() {
+    return value;
+  }
 
-    public Date getCreated() {
-        return created;
-    }
+  public void setValue(Double value) {
+    this.value = value;
+  }
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
+  public Date getCreated() {
+    return created;
+  }
 
-    public Student getStudent() {
-        return student;
-    }
+  public void setCreated(Date created) {
+    this.created = created;
+  }
 
-    public void setStudent(Student student) {
-        this.student = student;
-    }
+  public Student getStudent() {
+    return student;
+  }
 
-    public Course getCourse() {
-        return course;
-    }
+  public void setStudent(Student student) {
+    this.student = student;
+  }
 
-    public void setCourse(Course course) {
-        this.course = course;
-    }
+  public Course getCourse() {
+    return course;
+  }
+
+  public void setCourse(Course course) {
+    this.course = course;
+  }
 }

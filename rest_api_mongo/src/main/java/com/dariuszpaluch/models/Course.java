@@ -13,6 +13,7 @@ import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class Course {
         this.teacher = teacher;
     }
 
-
+    @XmlTransient
     public ObjectId getId() {
         return id;
     }

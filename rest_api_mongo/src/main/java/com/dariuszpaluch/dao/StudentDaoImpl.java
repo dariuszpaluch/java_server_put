@@ -18,8 +18,35 @@ public class StudentDaoImpl implements IStudentDao {
   private Datastore datastore = Context.getInstance().getDatastore();
 
   @Override
-  public List<Student> getAllStudents() {
-    return this.datastore.find(Student.class).asList();
+  public List<Student> getAllStudents(String firstName, String lastName, Date dateOfBirth, int dateOfBirthCompareType) {
+    Query<Student> query = this.datastore.createQuery(Student.class);
+      System.out.println(firstName);
+
+    if(firstName != null ) {
+      query.filter("firstName ==", firstName);
+    }
+
+    if(lastName != null ) {
+      query.filter("lastName ==", lastName);
+    }
+
+    if (dateOfBirth != null) {
+      switch (dateOfBirthCompareType) {
+        case 0:
+          query.filter("dateOfBirth <", dateOfBirth);
+          break;
+        case 1:
+          query.filter("dateOfBirth ==", dateOfBirth);
+          break;
+        case 2:
+          query.filter("dateOfBirth >", dateOfBirth);
+          break;
+      }
+    }
+
+
+
+    return query.asList();
   }
 
   @Override
@@ -27,7 +54,12 @@ public class StudentDaoImpl implements IStudentDao {
     Query<Student> query = this.datastore.createQuery(Student.class);
     query.filter("index ==", index);
 
-    return query.asList().get(0);
+    List<Student> students = query.asList();
+    if(students.size() > 0) {
+      return students.get(0);
+    }
+
+    return null;
   }
 
   @Override
