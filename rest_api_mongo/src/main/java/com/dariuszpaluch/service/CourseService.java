@@ -8,49 +8,50 @@ import com.dariuszpaluch.models.Course;
 
 import java.util.List;
 
-public class CourseService {
+public class CourseService implements ICourseDao{
     private final Context context = Context.getInstance();
     private final CourseDaoImpl coursesDao = new CourseDaoImpl();
 
+    @Override
     public List<Course> getAllCourse() {
         return this.coursesDao.getAllCourse();
     }
 
-//    @Override
-//    public Course getCourse(int id) {
-//        Course course = this.context.getCourses().getCourse(id);
-//
-//        if(course == null) {
-//            throw new DataNotFoundException("Course with id " + id + " not found");
-//        }
-//
-//        return course;
-//    }
-//
-//    @Override
-//    public boolean updateCourse(Course course, int id) {
-//        boolean result = this.context.getCourses().updateCourse(course, id);
-//
-//        if(!result) {
-//            throw new DataNotFoundException("Course with id " + id + " not found");
-//        }
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean deleteCourse(int id) {
-//        boolean result = this.context.getCourses().deleteCourse(id);
-//
-//        if(!result) {
-//            throw new DataNotFoundException("Course with id " + id + " not found");
-//        }
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public Course addCourse(Course course) {
-//        return this.context.getCourses().addCourse(course);
-//    }
+    @Override
+    public Course getCourse(String id) {
+        Course course = this.coursesDao.getCourse(id);
+
+        if(course == null) {
+            throw new DataNotFoundException("Course with id " + id + " not found");
+        }
+
+        return course;
+    }
+
+    @Override
+    public boolean updateCourse(Course course, String id) {
+        boolean result = this.coursesDao.updateCourse(course, id);
+
+        if(!result) {
+            throw new DataNotFoundException("Course with id " + id + " not found");
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean deleteCourse(String id) {
+        boolean result = this.coursesDao.deleteCourse(id);
+
+        if(!result) {
+            throw new DataNotFoundException("Course with id " + id + " not found");
+        }
+
+        return true;
+    }
+
+    @Override
+    public Course addCourse(Course course) {
+        return this.coursesDao.addCourse(course);
+    }
 }

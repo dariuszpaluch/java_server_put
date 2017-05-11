@@ -2,60 +2,56 @@ package com.dariuszpaluch.dao;
 
 import com.dariuszpaluch.dao.interfaces.ICourseDao;
 import com.dariuszpaluch.models.Course;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseDaoImpl{
-    private Datastore datastore = Context.getInstance().getDatastore();
+public class CourseDaoImpl implements ICourseDao {
+  private Datastore datastore = Context.getInstance().getDatastore();
 
-//    @Override
-    public List<Course> getAllCourse() {
-        return datastore.find(Course.class).asList();
+  @Override
+  public List<Course> getAllCourse() {
+    return datastore.find(Course.class).asList();
 
+  }
+
+  @Override
+  public Course getCourse(String id) {
+    return this.datastore.get(Course.class, new ObjectId(id));
+  }
+
+
+  @Override
+  public boolean updateCourse(Course course, String id) {
+    Course findCourse = this.datastore.get(Course.class, new ObjectId(id));
+
+    if (findCourse == null) {
+      return false;
     }
 
-//    @Override
-//    public Course getCourse(int id) {
-//        for(Course item: courses) {
-//            if(item.getId() == id) {
-//                return item;
-//            }
-//        }
-//
-//        return null;
-//    }
-//
-//    @Override
-//    public boolean updateCourse(Course course, int id) {
-//        for(Course item: courses) {
-//            if(item.getId() == id) {
-//                item.setName(course.getName());
-//                item.setTeacher(course.getTeacher());
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean deleteCourse(int id) {
-//        for(Course item: courses) {
-//            if(item.getId() == id) {
-//                courses.remove(item);
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
-//
-//    @Override
-//    public Course addCourse(Course course) {
-//        courses.add(course);
-//
-//        return this.getCourse(course.getId());
-//    }
+    findCourse.setName(course.getName());
+    findCourse.setTeacher(course.getTeacher());
+    this.datastore.save(findCourse);
+    return true;
+  }
+
+  @Override
+  public boolean deleteCourse(String id) {
+    Course findCourse = this.datastore.get(Course.class, new ObjectId(id));
+    if (findCourse == null) {
+      return false;
+    }
+    this.datastore.delete(Course.class, new ObjectId(id));
+
+    return true;
+  }
+
+  @Override
+  public Course addCourse(Course course) {
+    this.datastore.save(course);
+
+    return course;
+  }
 }

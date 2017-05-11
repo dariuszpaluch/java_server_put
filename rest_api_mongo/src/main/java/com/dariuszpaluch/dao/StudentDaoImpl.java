@@ -1,9 +1,12 @@
 package com.dariuszpaluch.dao;
 
 import com.dariuszpaluch.dao.interfaces.IStudentDao;
+import com.dariuszpaluch.models.Course;
 import com.dariuszpaluch.models.Student;
 import com.dariuszpaluch.utils.DatastoreHandlerUtil;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.Query;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -11,88 +14,53 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class StudentDaoImpl {
+public class StudentDaoImpl implements IStudentDao {
+  private Datastore datastore = Context.getInstance().getDatastore();
 
-//    private List<Student> students;
-//
-//    public StudentDaoImpl() {
-//        students = new ArrayList<Student>();
-//    }
-//
-//    public StudentDaoImpl(List<Student> students) {
-//        this.students = students;
-//    }
-//
-//    public List<Student> getAllStudents() {
-//        Datastore datastore = DatastoreHandlerUtil.getInstance().getDatastore();
-//
-//        return  datastore.find(Student.class).asList();
-//    }
-//
-//    @Override
-//    public Student getStudent(int index) {
-//        return null;
-//    }
-//
-//    @Override
-//    public boolean updateStudent(Student student, int index) {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean deleteStudent(int index) {
-//        return false;
-//    }
-//
-//    @Override
-//    public Student addStudent(Student student) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Student getStudent(int index) {
-//        Datastore datastore = DatastoreHandlerUtil.getInstance().getDatastore();
-//        List<Student> students = datastore.find(Student.class).asList();
-//
-//        for(Student item : students) {
-//            if(item.getIndex() == index) {
-//                return item;
-//            }
-//        }
-//
-//        return null;
-//    }
+  @Override
+  public List<Student> getAllStudents() {
+    return this.datastore.find(Student.class).asList();
+  }
 
-//    @Override
-//    public boolean updateStudent(Student student, int index) {
-//        for(Student item: students) {
-//            if(item.getIndex() == index) {
-//                item.setName(student.getName());
-//                item.setDateOfBirth(student.getDateOfBirth());
-//                item.setSurname(student.getSurname());
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean deleteStudent(int index) {
-//        for(Student item : students) {
-//            if(item.getIndex() == index) {
-//                students.remove(item);
-//                return true;
-//            }
-//        }
-//
-//        return  false;
-//    }
-//
-//    @Override
-//    public Student addStudent(Student student) {
-//        students.add(student);
-//
-//        return this.getStudent(student.getIndex());
-//    }
+  @Override
+  public Student getStudent(int index) {
+    Query<Student> query = this.datastore.createQuery(Student.class);
+    query.filter("index ==", index);
+
+    return query.asList().get(0);
+  }
+
+  @Override
+  public boolean updateStudent(Student student, int index) {
+    Student findStudent = this.getStudent(index);
+
+    if (findStudent == null) {
+      return false;
+    }
+
+    findStudent.setDateOfBirth(student.getDateOfBirth());
+    findStudent.setFirstName(student.getFirstName());
+    findStudent.setLastName(student.getLastName());
+
+    this.datastore.save(findStudent);
+    return true;
+  }
+
+  @Override
+  public boolean deleteStudent(int index) {
+    Student findStudent = this.getStudent(index);
+    if (findStudent == null) {
+      return false;
+    }
+
+    this.datastore.delete(findStudent);
+    return true;
+  }
+
+  @Override
+  public Student addStudent(Student student) {
+    this.datastore.save(student);
+
+    return student;
+  }
 }

@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface ICourseDao {
     public List<Course> getAllCourse();
-    public Course getCourse(int id);
-    public boolean updateCourse(Course course, int id);
-    public boolean deleteCourse(int id);
+    public Course getCourse(String id);
+    public boolean updateCourse(Course course, String id);
+    public boolean deleteCourse(String id);
     public Course addCourse(Course course);
 }
