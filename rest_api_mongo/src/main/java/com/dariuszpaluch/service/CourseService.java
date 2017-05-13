@@ -2,6 +2,7 @@ package com.dariuszpaluch.service;
 
 import com.dariuszpaluch.dao.Context;
 import com.dariuszpaluch.dao.CourseDaoImpl;
+import com.dariuszpaluch.dao.GradeDaoImpl;
 import com.dariuszpaluch.dao.interfaces.ICourseDao;
 import com.dariuszpaluch.exception.DataNotFoundException;
 import com.dariuszpaluch.models.Course;
@@ -10,6 +11,7 @@ import java.util.List;
 
 public class CourseService implements ICourseDao{
     private final CourseDaoImpl coursesDao = new CourseDaoImpl();
+    private final GradeDaoImpl gradeDao = new GradeDaoImpl();
 
     @Override
     public List<Course> getAllCourse(String teacher) {
@@ -40,11 +42,14 @@ public class CourseService implements ICourseDao{
 
     @Override
     public boolean deleteCourse(String id) {
-        boolean result = this.coursesDao.deleteCourse(id);
+        Course course = this.coursesDao.getCourse(id);
 
-        if(!result) {
+        if(course == null) {
             throw new DataNotFoundException("Course with id " + id + " not found");
         }
+
+        this.gradeDao.deleteGradesByCourse(course);
+        boolean result = this.coursesDao.deleteCourse(id);
 
         return true;
     }

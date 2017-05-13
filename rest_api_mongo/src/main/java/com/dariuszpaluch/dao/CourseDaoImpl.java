@@ -27,6 +27,10 @@ public class CourseDaoImpl implements ICourseDao {
 
   @Override
   public Course getCourse(String id) {
+    if (!ObjectId.isValid(id)) {
+      return null;
+    }
+
     return this.datastore.get(Course.class, new ObjectId(id));
   }
 

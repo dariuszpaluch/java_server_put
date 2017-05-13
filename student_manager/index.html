@@ -1,0 +1,183 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Students manager</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <img src="img/student-hat.png" alt="student-hat"/>
+        <h1>Students manager</h1>
+    </header>
+    <main>
+        <nav>
+            <a href="#students-table">Students</a>
+            <a href="#courses-table">Courses</a>
+            <a href="#grades-table">Grades</a>
+        </nav>
+        <section id="students-table">
+            <h2>Lista studentów</h2>
+            <form>
+                <table>
+                    <thead>
+                    <tr>
+                        <th><span>Index</span><input type="search" /></th>
+                        <th><span>Name</span><input type="search" /></th>
+                        <th><span>Surname</span><input type="search" /></th>
+                        <th><span>Birthday</span><input type="search" /></th>
+                        <th><span>actions</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Dariusz</td>
+                        <td>Paluch</td>
+                        <td>1994-02-01</td>
+                        <td>
+                            <button><img src="img/edit.png" alt="Edit"/></button>
+                            <button><img src="img/delete.png" alt="delete"/></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Adam</td>
+                        <td>Nowak</td>
+                        <td>1999-05-01</td>
+                        <td>
+                            <button><img src="img/edit.png" alt="Edit"/></button>
+                            <button><img src="img/delete.png" alt="delete"/></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <td></td>
+                        <td><input type="text" placeholder="Name" required/></td>
+                        <td><input type="text" placeholder="Surname" required/></td>
+                        <td><input type="date" required/></td>
+                        <td>
+                            <button><img src="img/close.png" alt="close"/></button>
+                            <button type="submit"><img src="img/save.png" alt="save"/></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </section>
+
+        <section id="courses-table">
+            <h2>Lista kursów</h2>
+            <form>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th><span>Name</span><input type="search" /></th>
+                        <th><span>Teacher</span><input type="search" /></th>
+                        <th><span>Actions</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Analiza Matematyczna</td>
+                        <td>M. Nowak</td>
+                        <td>
+                            <button><img src="img/edit.png" alt="Edit"/></button>
+                            <button><img src="img/delete.png" alt="delete"/></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Matematyka dyskretna</td>
+                        <td>H. Kazimierczak</td>
+                        <td>
+                            <button><img src="img/edit.png" alt="Edit"/></button>
+                            <button><img src="img/delete.png" alt="delete"/></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <td><input type="text" placeholder="Name" required/></td>
+                        <td><input type="text" placeholder="Teacher" required/></td>
+                        <td>
+                            <button><img src="img/close.png" alt="close"/></button>
+                            <button type="submit"><img src="img/save.png" alt="save"/></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </section>
+
+        <section id="grades-table">
+            <h2>Lista ocen</h2>
+            <form>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th><span>Value</span><input type="search" /></th>
+                        <th><span>Student index</span><input type="search" /></th>
+                        <th><span>Course name</span><input type="search" /></th>
+                        <th><span>Created</span><input type="search" /></th>
+                        <th><span>Actions</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>5.0</td>
+                        <td>1</td>
+                        <td>Matematyka dyskretna</td>
+                        <td>2017-01-05</td>
+                        <td>
+                            <button><img src="img/edit.png" alt="Edit"/></button>
+                            <button><img src="img/delete.png" alt="delete"/></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3.0</td>
+                        <td>2</td>
+                        <td>Matematyka dyskretna</td>
+                        <td>2015-01-05</td>
+                        <td>
+                            <button><img src="img/edit.png" alt="Edit"/></button>
+                            <button><img src="img/delete.png" alt="delete"/></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <td><input type="number" placeholder="value" required/></td>
+                        <td><select>
+                            <option>1</option>
+                            <option>2</option>
+                        </select></td>
+                        <td><select>
+                            <option>Matematyka dyskretna</option>
+                            <option>Analiza matematyczna</option>
+                        </select></td>
+                        <td><input type="date" required/></td>
+                        <td>
+                            <button><img src="img/close.png" alt="close"/></button>
+                            <button type="submit"><img src="img/save.png" alt="save"/></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </section>
+
+    </main>
+
+    <footer>Dariusz Paluch <a href="http://www.dariuszpaluch.com" target="_blank">website</a></footer>
+</body>
+</html>

@@ -23,11 +23,11 @@ public class StudentDaoImpl implements IStudentDao {
       System.out.println(firstName);
 
     if(firstName != null ) {
-      query.filter("firstName ==", firstName);
+      query = query.field("firstName").containsIgnoreCase(firstName);
     }
 
     if(lastName != null ) {
-      query.filter("lastName ==", lastName);
+      query = query.field("lastName").containsIgnoreCase(lastName);
     }
 
     if (dateOfBirth != null) {

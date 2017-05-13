@@ -12,6 +12,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -41,8 +42,16 @@ public class Context {
       datastore.save(counter);
 
       List<Student> dataStudents = new ArrayList<Student>();
-      Student student1 = new Student(counterDao.getSeq("students"), "Dariusz", "Paluch", new Date());
-      Student student2 = new Student(counterDao.getSeq("students"), "Adam", "Nowak", new Date());
+      Calendar calendar = Calendar.getInstance();
+      calendar.set(Calendar.YEAR, 1994);
+      calendar.set(Calendar.MONTH, 1);
+      calendar.set(Calendar.DAY_OF_MONTH, 18);
+      Student student1 = new Student(counterDao.getSeq("students"), "Dariusz", "Paluch", calendar.getTime());
+
+      calendar.set(Calendar.YEAR, 2000);
+      calendar.set(Calendar.MONTH, 5);
+      calendar.set(Calendar.DAY_OF_MONTH, 20);
+      Student student2 = new Student(counterDao.getSeq("students"), "Adam", "Nowak", calendar.getTime());
       dataStudents.add(student1);
       dataStudents.add(student2);
 

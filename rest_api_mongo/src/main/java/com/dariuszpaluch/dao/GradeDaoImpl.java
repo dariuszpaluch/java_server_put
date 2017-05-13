@@ -86,6 +86,14 @@ public class GradeDaoImpl implements IGradeDao {
     return true;
   }
 
+  public boolean deleteGradesByCourse(Course course) {
+    List<Grade> grades = this.getCourseGrade(course);
+    for(Grade grade: grades) {
+      this.datastore.delete(grade);
+    }
+    return true;
+  }
+
   @Override
   public Grade addGrade(Grade grade) {
     this.datastore.save(grade);

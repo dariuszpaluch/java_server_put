@@ -34,7 +34,7 @@ public class StudentResource {
     @QueryParam("firstName") String firstName,
     @QueryParam("lastName") String lastName,
     @QueryParam("dateOfBirth") Date dateOfBirth,
-    @DefaultValue("0")  @QueryParam("dateOfBirthCompareType") int dateOfBirthCompareType //0 '<', 1 '=', 2 '>'
+    @DefaultValue("1")  @QueryParam("dateOfBirthCompareType") int dateOfBirthCompareType //0 '<', 1 '=', 2 '>'
   ) {
 
     return Response.ok(studentService.getAllStudents(firstName, lastName, dateOfBirth, dateOfBirthCompareType)).build();
