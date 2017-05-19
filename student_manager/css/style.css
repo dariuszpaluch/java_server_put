@@ -1,17 +1,25 @@
-html, body {
-  height: 100%;
-}
-
 body > header {
-  position: fixed;
-  height: 50px;
+  /*position: fixed;*/
+  /*height: 50px;*/
   width: 100%;
   top: 0;
-  background-color: #1976D2;
+  background: -moz-linear-gradient(270deg, rgba(33,150,243,1) 0%, rgba(13,71,161,1) 100%); /* ff3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(33,150,243,1)), color-stop(100%, rgba(13,71,161,1))); /* safari4+,chrome */
+  background: -webkit-linear-gradient(270deg, rgba(33,150,243,1) 0%, rgba(13,71,161,1) 100%); /* safari5.1+,chrome10+ */
+  background: -o-linear-gradient(270deg, rgba(33,150,243,1) 0%, rgba(13,71,161,1) 100%); /* opera 11.10+ */
+  background: -ms-linear-gradient(270deg, rgba(33,150,243,1) 0%, rgba(13,71,161,1) 100%); /* ie10+ */
+  background: linear-gradient(180deg, rgba(33,150,243,1) 0%, rgba(13,71,161,1) 100%); /* w3c */
   color: white;
   left: 0;
 }
 
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
 body > header > img , body > header > h1 {
   display: inline-block;
   margin: 0;
@@ -19,6 +27,9 @@ body > header > img , body > header > h1 {
   height: 50px;
 }
 
+body > header > h1 {
+  font-family: 'Roboto', sans-serif;
+}
 body > section {
 }
 
@@ -30,16 +41,16 @@ body {
 }
 
 body > main {
-  margin-top: 50px;
-  padding: 10px;
+  /*margin-top: 50px;*/
+  /*padding: 10px;*/
   height: 100%;
 }
 
 body > footer {
-  position: absolute;
+  /*position: absolute;*/
   width: 100%;
   height: 50px;
-  left: 0;
+  /*left: 0;*/
   /*bottom: 0;*/
   color: white;
   background-color: #78909C;
@@ -54,30 +65,132 @@ body > footer > a {
 table {
   color: #333; /* Lighten up font color */
   font-family: Helvetica, Arial, sans-serif; /* Nicer font */
-  border-collapse:
-          collapse; border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100% !important;
 }
 
-td, th { border: 1px solid #CCC; height: 30px; } /* Make cells a bit taller */
+table button {
+  width: 1.5em;
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  font-family: "Bitter",serif;
+  line-height: 1.8;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+table button:focus {
+  outline: none
+}
+
+button {
+  color: #fff;
+  background-color: transparent;
+  text-shadow: -1px 1px #417cb8;
+  border: none;
+}
+
+button:hover,
+button.hover {
+  background-color: #346392;
+  text-shadow: -1px 1px #27496d;
+}
+
+button:active,
+button.active {
+  background-color: #27496d;
+  text-shadow: -1px 1px #193047;
+}
+
+table button > img {
+  width: 100%;
+}
+button {
+
+}
+
+button:focus {
+  outline: none
+}
+
+tbody > tr:nth-child(odd) {
+  background-color: white;
+}
+
+tbody > tr:hover {
+  background-color: #417cb8;
+}
+
+td, th {
+  width: 20%;
+  border: 1px solid #CCC;
+  /*height: 30px; */
+} /* Make cells a bit taller */
 
 th {
-  background: #F3F3F3; /* Light grey background */
+  /*background: #F3F3F3; !* Light grey background *!*/
   font-weight: bold; /* Make sure they're bold */
 }
 
 td {
-  background: #FAFAFA; /* Lighter grey background */
+  /*background: #FAFAFA; !* Lighter grey background *!*/
   text-align: center; /* Center our text */
 }
 
-table > thead > tr > th > input {
+table > thead > tr > th > input, tr > td > input, tr > td > select {
+  width: 75%;
+}
 
+body > main {
+  flex-flow: row wrap;
+  display: flex;
 }
 
 body > main > section {
+  margin: 10px;
   display: none;
 }
 
 body > main > section:target {
   display: block;
+  flex: 2 2 85%;
+  /*margin: 10px;*/
+}
+
+main > nav {
+  flex: 1 1 100px;
+  background: #FFC107;
+  text-align: center;
+  /*display: flex;*/
+}
+
+main > nav > a {
+  display: block;
+}
+
+td > input:invalid {
+  background-color: rosybrown;
+}
+
+@media print {
+  body > main {
+    margin-top: 0;
+  }
+  header, footer, th > input, tr > td:last-child, tr > th:last-child, nav {
+    display: none;
+  }
+
+  td, th {
+    color: black;
+    background-color: white;
+  }
+
+  tbody.edit {
+    display: none;
+  }
 }
