@@ -2,47 +2,48 @@
 
 var API = "http://localhost:9999/";
 
-var prepareModel = function (query) {
+var prepareModel = function (url, query) {
   var self = ko.observableArray();
 
-  const url = API + query;
   self.url = url;
 
   self.get = function () {
     $.ajax({
       type: 'GET',
-      url: url,
+      url: self.url,
       contentType: 'application/json; charset=UTF-8',
       dataType: "json",
       success: function (data) {
-        console.log('Pobrano: ' + url);
         data.forEach(function (item) {
           const object = ko.mapping.fromJS(item, { ignore: ["link"] });
           self.push(object);
         });
       },
       error: function (error) {
-
+        console.error(error);
       }
     });
   };
 
-  self.get();
-
   return self;
 };
 
-function Student(data) {
-  this.firstName = ko.observable(data.firstName);
-  this.lastName = ko.observable(data.lastName);
-
-}
-
 function studentManagerViewModel() {
   var self = this;
-  self.students = prepareModel("students");
-  self.courses = prepareModel("courses");
-  self.grades = prepareModel("students/1/grades"); //TODO temporary
+  self.students = prepareModel(API + "students");
+  self.students.showGrades = function() {
+    var index = this.index();
+    self.grades.studentIndex = index;
+    self.grades.url = API + "students/" + index + "/grades";
+    self.grades.get();
+    window.location = "#grades-table";
+  };
+  self.students.get();
+
+  self.courses = prepareModel(API + "courses");
+  self.courses.get();
+
+  self.grades = prepareModel();
 }
 
 
