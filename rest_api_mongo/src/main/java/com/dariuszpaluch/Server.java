@@ -27,7 +27,8 @@ public class Server {
         URI baseUri = UriBuilder.fromUri("http://localhost").port(9999).build();
 
         ResourceConfig config = new ResourceConfig().packages("com.dariuszpaluch").registerClasses(
-                DeclarativeLinkingFeature.class
+                DeclarativeLinkingFeature.class,
+                CustomHeaders.class
         );
         config.register(new DateParamConverterProvider("yyyy-MM-dd"));
 

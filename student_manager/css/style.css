@@ -118,7 +118,7 @@ button:focus {
   outline: none
 }
 
-tbody > tr:nth-child(odd) {
+tbody > tr:nth-child(odd), tbody > tr:nth-child(odd) > input {
   background-color: white;
 }
 
