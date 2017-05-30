@@ -41,7 +41,15 @@ public class GradeDaoImpl implements IGradeDao {
       }
     }
 
-    return query.asList();
+    List<Grade> list = null;
+    try {
+      list = query.asList();
+    }
+    catch(Exception e) {
+      list = new ArrayList<>();
+    }
+
+    return list;
   }
 
   @Override

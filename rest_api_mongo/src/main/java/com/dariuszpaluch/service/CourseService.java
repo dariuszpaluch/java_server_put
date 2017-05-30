@@ -48,8 +48,10 @@ public class CourseService implements ICourseDao{
             throw new DataNotFoundException("Course with id " + id + " not found");
         }
 
-        this.gradeDao.deleteGradesByCourse(course);
         boolean result = this.coursesDao.deleteCourse(id);
+//        if(result) {
+//            this.gradeDao.deleteGradesByCourse(course);
+//        }
 
         return true;
     }

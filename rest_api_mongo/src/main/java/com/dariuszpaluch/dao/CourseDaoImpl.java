@@ -55,7 +55,7 @@ public class CourseDaoImpl implements ICourseDao {
     if (findCourse == null) {
       return false;
     }
-    this.datastore.delete(Course.class, new ObjectId(id));
+    this.datastore.delete(findCourse);
 
     return true;
   }

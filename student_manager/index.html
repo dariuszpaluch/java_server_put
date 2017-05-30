@@ -27,7 +27,6 @@
     <nav>
         <a href="#students-table">Students</a>
         <a href="#courses-table">Courses</a>
-        <a href="#grades-table">Grades</a>
     </nav>
     <section id="students-table">
         <h2>Lista studentów</h2>
@@ -49,9 +48,9 @@
                         <td data-bind="text: lastName"></td>
                         <td data-bind="text: dateOfBirth"></td>
                         <td>
-                            <button data-bind="click: $parent.students.showGrades">Szczegóły</button>
                             <button><img src="img/edit.png" alt="Edit"/></button>
-                            <button><img src="img/delete.png" alt="delete"/></button>
+                            <button data-bind="click: $parent.students.delete"><img src="img/delete.png" alt="delete"/></button>
+                            <button data-bind="click: $parent.students.showGrades"><img src="img/arrow-right.png" alt="Show details"/></button>
                         </td>
                     </tr>
                 </tbody>
@@ -77,7 +76,7 @@
                     <td data-bind="text: teacher"></td>
                     <td>
                         <button><img src="img/edit.png" alt="Edit"/></button>
-                        <button><img src="img/delete.png" alt="delete"/></button>
+                        <button data-bind="click: $parent.courses.delete"><img src="img/delete.png" alt="delete"/></button>
                     </td>
                 </tr>
                 </tbody>
@@ -114,7 +113,7 @@
                     <td data-bind="text: created"></td>
                     <td>
                         <button><img src="img/edit.png" alt="Edit"/></button>
-                        <button><img src="img/delete.png" alt="delete"/></button>
+                        <button data-bind="click: $parent.grades.delete"><img src="img/delete.png" alt="delete"/></button>
                     </td>
                 </tr>
                 </tbody>
