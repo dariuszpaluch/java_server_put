@@ -158,22 +158,6 @@ function studentManagerViewModel() {
 
     const observableData = ko.mapping.fromJS(data);
     self.grades.push(observableData);
-    // const preperedData = {
-    //   ...data,
-    // }
-    //
-    // //clean form
-    // $(form).each(function() {
-    //   this.reset();
-    // });
-    // data[self.idColumnName] = null;
-    //
-    // const observableData = ko.mapping.fromJS(data);
-    //
-    // self.push(observableData);
-    // $(form).each(function() {
-    //   this.reset();
-    // });
   };
 }
 
