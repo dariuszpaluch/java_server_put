@@ -42,24 +42,25 @@
                 </tr>
                 </thead>
                 <tbody data-bind="foreach: students, visible: students().length > 0">
-                    <tr>
-                        <td data-bind="text: index"></td>
-                        <td data-bind="text: firstName"></td>
-                        <td data-bind="text: lastName"></td>
-                        <td data-bind="text: dateOfBirth"></td>
-                        <td>
-                            <button><img src="img/edit.png" alt="Edit"/></button>
-                            <button data-bind="click: $parent.students.delete"><img src="img/delete.png" alt="delete"/></button>
-                            <button data-bind="click: $parent.students.showGrades"><img src="img/arrow-right.png" alt="Show details"/></button>
-                        </td>
-                    </tr>
+                <tr>
+                    <td data-bind="text: index"><input/></td>
+                    <td><input data-bind="value: firstName"/></td>
+                    <td><input data-bind="value: lastName"/></td>
+                    <td><input data-bind="value: dateOfBirth" type="date" max='2017-06-01'/></td>
+                    <td>
+                        <button data-bind="click: $parent.students.delete"><img src="img/delete.png" alt="delete"/>
+                        </button>
+                        <button data-bind="click: $parent.students.showGrades"><img src="img/arrow-right.png"
+                                                                                    alt="Show details"/></button>
+                    </td>
+                </tr>
                 </tbody>
                 <tbody class="edit">
                 <tr>
                     <td></td>
                     <td><input name="firstName" type="text" placeholder="Name" required/></td>
                     <td><input name="lastName" type="text" placeholder="Surname" required/></td>
-                    <td><input name="dateOfBirth" type="date" required/></td>
+                    <td><input name="dateOfBirth" type="date" required max='2017-06-01'/></td>
                     <td>
                         <button type="submit"><img src="img/save.png" alt="save"/></button>
                     </td>
@@ -83,11 +84,15 @@
                 </thead>
                 <tbody data-bind="foreach: courses, visible: courses().length > 0">
                 <tr>
-                    <td data-bind="text: name"></td>
-                    <td data-bind="text: teacher"></td>
                     <td>
-                        <button><img src="img/edit.png" alt="Edit"/></button>
-                        <button data-bind="click: $parent.courses.delete"><img src="img/delete.png" alt="delete"/></button>
+                        <input data-bind="value: name" type="text"/>
+                    </td>
+                    <td>
+                        <input data-bind="value: teacher" type="text"/>
+                    </td>
+                    <td>
+                        <button data-bind="click: $parent.courses.delete"><img src="img/delete.png" alt="delete"/>
+                        </button>
                     </td>
                 </tr>
                 </tbody>
@@ -119,12 +124,19 @@
                 </thead>
                 <tbody data-bind="foreach: grades, visible: grades().length > 0">
                 <tr>
-                    <td data-bind="text: value"></td>
-                    <td data-bind="text: course.name"></td>
-                    <td data-bind="text: created"></td>
+                    <td><input data-bind="value: value"/></td>
                     <td>
-                        <button><img src="img/edit.png" alt="Edit"/></button>
-                        <button data-bind="click: $parent.grades.delete"><img src="img/delete.png" alt="delete"/></button>
+                        <select
+                                name="course"
+                                data-bind="foreach: $parent.courses, visible: $parent.courses().length > 0, value: course.id">
+                            <option data-bind="text: name, value: id">
+                            </option>
+                        </select>
+                    </td>
+                    <td><input data-bind="value: created" type="date" max='2017-06-01'/></td>
+                    <td>
+                        <button data-bind="click: $parent.grades.delete"><img src="img/delete.png" alt="delete"/>
+                        </button>
                     </td>
                 </tr>
                 </tbody>
@@ -136,7 +148,7 @@
                             <option data-bind="text: name, value: id"></option>
                         </select>
                     </td>
-                    <td><input name="created" type="date" required/></td>
+                    <td><input name="created" type="date" required max='2017-06-01'/></td>
                     <td>
                         <button type="submit">
                             <img src="img/save.png" alt="save"/>

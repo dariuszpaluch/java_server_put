@@ -13,6 +13,18 @@ body > header {
   left: 0;
 }
 
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+}
+
+select > option {
+  color: dimgray;
+}
+
 a {
   text-decoration: none;
 }
@@ -122,13 +134,40 @@ tbody > tr:nth-child(odd), tbody > tr:nth-child(odd) > input {
   background-color: white;
 }
 
-tbody > tr:hover {
-  background-color: #417cb8;
+tbody input {
+  background-color: transparent;
+  border: none;
 }
+tbody.edit > tr {
+  background-color: rgba(139,195,74 ,1);
+}
+
+tbody.edit > tr > td {
+  padding: 10px;
+  color: white;
+}
+
+tbody:not(.edit) > tr:hover {
+  background-color: rgba(3,169,244 ,0.3);
+}
+
+table {
+  table-layout: fixed;
+}
+tbody > tr > td:last-child, thead > tr > th:last-child {
+  width: 80px;
+}
+
+input {
+  box-sizing: border-box;
+}
+
+
 
 td, th {
   width: 20%;
   border: 1px solid #CCC;
+  text-align: left;
   /*height: 30px; */
 } /* Make cells a bit taller */
 
@@ -142,9 +181,21 @@ td {
   text-align: center; /* Center our text */
 }
 
-table > thead > tr > th > input, tr > td > input, tr > td > select {
-  width: 75%;
+table > tbody input {
+  width: 100%;
+  padding-left: 10px;
 }
+
+th {
+  padding: 10px;
+}
+
+table > thead > tr > th > input, tbody.edit > tr > td > input, tbody.edit > tr > td > select {
+  width: 75%;
+  padding-left: 0;
+}
+
+
 
 body > main {
   flex-flow: row wrap;
@@ -174,7 +225,7 @@ main > nav > a {
 }
 
 td > input:invalid {
-  background-color: rosybrown;
+  background-color: rgba(255,205,210 ,1);
 }
 
 @media print {
