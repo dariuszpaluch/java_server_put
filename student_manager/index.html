@@ -29,7 +29,7 @@
         <a href="#courses-table">Courses</a>
     </nav>
     <section id="students-table">
-        <h2>Lista studentów</h2>
+        <h2>Lista studentów </h2>
         <form data-bind="submit: students.add">
             <table>
                 <thead>
@@ -46,7 +46,7 @@
                     <td data-bind="text: index"><input/></td>
                     <td><input data-bind="value: firstName"/></td>
                     <td><input data-bind="value: lastName"/></td>
-                    <td><input data-bind="value: dateOfBirth" type="date" max='2017-06-01'/></td>
+                    <td><input data-bind="value: dateOfBirth" type="date" max='2017-06-02'/></td>
                     <td>
                         <button data-bind="click: $parent.students.delete"><img src="img/delete.png" alt="delete"/>
                         </button>
@@ -60,7 +60,7 @@
                     <td></td>
                     <td><input name="firstName" type="text" placeholder="Name" required/></td>
                     <td><input name="lastName" type="text" placeholder="Surname" required/></td>
-                    <td><input name="dateOfBirth" type="date" required max='2017-06-01'/></td>
+                    <td><input name="dateOfBirth" type="date" required max='2017-06-02'/></td>
                     <td>
                         <button type="submit"><img src="img/save.png" alt="save"/></button>
                     </td>
@@ -110,7 +110,11 @@
     </section>
 
     <section id="grades-table">
-        <h2>Lista ocen studenta</h2>
+        <h2>Lista ocen studenta:
+            <span data-bind="text: grades.firstName"></span>
+            <span data-bind="text: grades.lastName"></span>
+            <span>Index: <span data-bind="text: grades.index"></span></span>
+        </h2>
         <form data-bind="submit: grades.add">
 
             <table>
@@ -133,7 +137,7 @@
                             </option>
                         </select>
                     </td>
-                    <td><input data-bind="value: created" type="date" max='2017-06-01'/></td>
+                    <td><input data-bind="value: created" type="date" max='2017-06-02'/></td>
                     <td>
                         <button data-bind="click: $parent.grades.delete"><img src="img/delete.png" alt="delete"/>
                         </button>
@@ -148,7 +152,7 @@
                             <option data-bind="text: name, value: id"></option>
                         </select>
                     </td>
-                    <td><input name="created" type="date" required max='2017-06-01'/></td>
+                    <td><input name="created" type="date" required max='2017-06-02'/></td>
                     <td>
                         <button type="submit">
                             <img src="img/save.png" alt="save"/>

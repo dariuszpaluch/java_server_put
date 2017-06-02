@@ -148,7 +148,12 @@ function studentManagerViewModel() {
   self.students = prepareModel("students", "index");
   self.students.showGrades = function() {
     var index = this.index();
+    var firstName = this.firstName();
+    var lastName = this.lastName();
     self.grades.studentIndex = index;
+    self.grades.firstName(firstName);
+    self.grades.lastName(   lastName);
+    self.grades.index(index);
     self.grades.url = "students/" + index + "/grades";
     self.grades.get();
 
@@ -160,6 +165,11 @@ function studentManagerViewModel() {
   self.courses.get();
 
   self.grades = prepareModel();
+
+    self.grades.firstName = ko.observable('');
+    self.grades.lastName = ko.observable('');
+    self.grades.index = ko.observable(1);
+
   self.grades.add = function(form) {
     var data = {};
     $(form).serializeArray().map(function(property) {
