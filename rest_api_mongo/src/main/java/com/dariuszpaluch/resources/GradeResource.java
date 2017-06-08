@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Path("students/{index}/grades")
@@ -34,9 +35,11 @@ public class GradeResource {
   @GET
   public List<Grade> getGrades(
           @PathParam("index") final int index,
-          @QueryParam("courseId") String courseId,
-          @DefaultValue("0") @QueryParam("compareValueType") int compareType, //0 '<', 1 '=', 2 '>'
-          @DefaultValue("0") @QueryParam("compareValue") int compareValue
+          @QueryParam("courseIdQuery") String courseId,
+          @QueryParam("courseNameQuery") String courseName,
+          @QueryParam("createdQuery") Date created,
+          @DefaultValue("0") @QueryParam("compareValueType") int compareType, //-1 '<', 0 '=', 1 '>'
+          @DefaultValue("0") @QueryParam("valueQuery") int compareValue
   ) {
     Student student = studentService.getStudent(index);
     Course course = null;
@@ -44,7 +47,9 @@ public class GradeResource {
       course = courseService.getCourse(courseId);
     }
 
-    return gradeService.getStudentGrade(student, course, compareType, compareValue);
+    List<Course> courses = null;
+
+    return gradeService.getStudentGrade(student, course, compareType, compareValue, courseName, created);
   }
 
   @POST

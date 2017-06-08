@@ -31,9 +31,10 @@ public class CourseResource {
 
   @GET
   public Response getAll(
-    @QueryParam("teacher") String teacher
+    @QueryParam("nameQuery") String name,
+    @QueryParam("teacherQuery") String teacher
   ) {
-    return Response.ok(courseService.getAllCourse(teacher)).build();
+    return Response.ok(courseService.getAllCourse(name, teacher)).build();
   }
 
   @GET

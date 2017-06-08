@@ -9,7 +9,9 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GradeDaoImpl implements IGradeDao {
   private Datastore datastore = Context.getInstance().getDatastore();
@@ -20,7 +22,7 @@ public class GradeDaoImpl implements IGradeDao {
   }
 
   @Override
-  public List<Grade> getStudentGrade(Student student, Course course, int compareType, int compareValue) {
+  public List<Grade> getStudentGrade(Student student, Course course, int compareType, int compareValue, String courseName, Date created ) {
     Query<Grade> query = this.datastore.createQuery(Grade.class).filter("student", student);
 
     if(course != null ) {
@@ -29,17 +31,26 @@ public class GradeDaoImpl implements IGradeDao {
 
     if(compareValue > 0) {
       switch (compareType) {
-        case 0:
+        case -1:
           query.filter("value <", compareValue);
           break;
-        case 1:
+        case 0:
           query.filter("value ==", compareValue);
           break;
-        case 2:
+        case 1:
           query.filter("value >", compareValue);
           break;
       }
     }
+
+    if(created != null) {
+      query.filter("created", created);
+    }
+
+
+
+
+
 
     List<Grade> list = null;
     try {
@@ -47,6 +58,13 @@ public class GradeDaoImpl implements IGradeDao {
     }
     catch(Exception e) {
       list = new ArrayList<>();
+    }
+
+
+    if(courseName != null) {
+      List<Grade> result = new ArrayList<>();
+
+      list = list.stream().filter(_grade -> _grade.getCourse().getName().toLowerCase().contains(courseName.toLowerCase())).collect(Collectors.toList());
     }
 
     return list;

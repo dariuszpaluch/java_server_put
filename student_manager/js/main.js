@@ -1,6 +1,6 @@
 "use strict";
 
-var API = "http://localhost:9996/";
+var API = "http://localhost:9995/";
 
 var prepareModel = function (url, idColumnName) {
   var self = ko.observableArray();
@@ -8,10 +8,16 @@ var prepareModel = function (url, idColumnName) {
   self.url = url;
   self.idColumnName = idColumnName || "id";
 
-  self.get = function () {
+  self.get = function (query) {
+    var url = API + self.url;
+
+    if(query) {
+      url += query;
+    }
+
     $.ajax({
       type: 'GET',
-      url: API + self.url,
+      url: url,
       contentType: 'application/json; charset=UTF-8',
       dataType: "json",
       success: function (data) {
@@ -155,6 +161,18 @@ var prepareModel = function (url, idColumnName) {
     self.remove(this);
   };
 
+  self.parseQuery = function() {
+    var queries = {};
+    Object.keys(self.queryParams).forEach(function(key) {
+      if(self.queryParams[key]()) {
+        queries[key] = self.queryParams[key];
+      }
+    });
+
+    console.log(queries);
+    self.get('?' + $.param(ko.mapping.toJS(queries)));
+  };
+
 
   return self;
 };
@@ -175,9 +193,33 @@ function studentManagerViewModel() {
 
     window.location = "#grades-table";
   };
+
+  self.students.queryParams = {
+    indexQuery: ko.observable(),
+    firstNameQuery: ko.observable(),
+    lastNameQuery: ko.observable(),
+    dateOfBirthQuery: ko.observable()
+  };
+
+  Object.keys(self.students.queryParams).forEach(function(key) {
+    self.students.queryParams[key].subscribe(function() {
+      self.students.parseQuery();
+    });
+  });
+
   self.students.get();
 
   self.courses = prepareModel("courses");
+  self.courses.queryParams = {
+    nameQuery: ko.observable(),
+    teacherQuery: ko.observable()
+  };
+
+  Object.keys(self.courses.queryParams).forEach(function(key) {
+    self.courses.queryParams[key].subscribe(function() {
+      self.courses.parseQuery();
+    });
+  });
   self.courses.get();
 
   self.grades = prepareModel();
@@ -215,6 +257,18 @@ function studentManagerViewModel() {
 
       self.grades.push(observableData);
   };
+
+  self.grades.queryParams = {
+    valueQuery: ko.observable(),
+    courseNameQuery: ko.observable(),
+    createdQuery: ko.observable(),
+  };
+
+  Object.keys(self.grades.queryParams).forEach(function(key) {
+    self.grades.queryParams[key].subscribe(function() {
+      self.grades.parseQuery();
+    });
+  });
 }
 
 

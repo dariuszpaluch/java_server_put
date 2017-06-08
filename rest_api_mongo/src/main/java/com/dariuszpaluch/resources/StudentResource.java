@@ -31,13 +31,14 @@ public class StudentResource {
 
   @GET
   public Response getAll(
-    @QueryParam("firstName") String firstName,
-    @QueryParam("lastName") String lastName,
-    @QueryParam("dateOfBirth") Date dateOfBirth,
-    @DefaultValue("1")  @QueryParam("dateOfBirthCompareType") int dateOfBirthCompareType //0 '<', 1 '=', 2 '>'
+    @QueryParam("indexQuery") int index,
+    @QueryParam("firstNameQuery") String firstName,
+    @QueryParam("lastNameQuery") String lastName,
+    @QueryParam("dateOfBirthQuery") Date dateOfBirth,
+    @DefaultValue("1")  @QueryParam("dateOfBirthCompareType") int dateOfBirthCompareType //-1'<', 0 '=', 1 '>'
   ) {
 
-    return Response.ok(studentService.getAllStudents(firstName, lastName, dateOfBirth, dateOfBirthCompareType)).build();
+    return Response.ok(studentService.getAllStudents(index, firstName, lastName, dateOfBirth, dateOfBirthCompareType)).build();
   }
 
 

@@ -14,6 +14,7 @@ import com.dariuszpaluch.utils.BeforeDateValid;
 import com.dariuszpaluch.utils.GradeValid;
 import com.dariuszpaluch.utils.ValidCompareType;
 
+import java.util.Date;
 import java.util.List;
 
 public class GradeService implements IGradeDao {
@@ -25,7 +26,7 @@ public class GradeService implements IGradeDao {
   }
 
   @Override
-  public List<Grade> getStudentGrade(Student student, Course course, int compareType, int compareValue) {
+  public List<Grade> getStudentGrade(Student student, Course course, int compareType, int compareValue, String courseName,  Date created) {
     if (compareValue > 0) {
       if (!ValidCompareType.valid(compareType)) {
         throw new WrongCompareTypeException();
@@ -37,7 +38,7 @@ public class GradeService implements IGradeDao {
 //      }
     }
 
-    return this.gradeDao.getStudentGrade(student, course, compareType, compareValue);
+    return this.gradeDao.getStudentGrade(student, course, compareType, compareValue, courseName, created);
   }
 
   @Override

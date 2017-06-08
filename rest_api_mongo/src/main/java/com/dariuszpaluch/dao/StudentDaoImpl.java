@@ -18,9 +18,13 @@ public class StudentDaoImpl implements IStudentDao {
   private Datastore datastore = Context.getInstance().getDatastore();
 
   @Override
-  public List<Student> getAllStudents(String firstName, String lastName, Date dateOfBirth, int dateOfBirthCompareType) {
+  public List<Student> getAllStudents(int index, String firstName, String lastName, Date dateOfBirth, int dateOfBirthCompareType) {
     Query<Student> query = this.datastore.createQuery(Student.class);
       System.out.println(firstName);
+
+    if(index > 0 ) {
+      query = query.filter("index", index);
+    }
 
     if(firstName != null ) {
       query = query.field("firstName").containsIgnoreCase(firstName);
@@ -32,13 +36,13 @@ public class StudentDaoImpl implements IStudentDao {
 
     if (dateOfBirth != null) {
       switch (dateOfBirthCompareType) {
-        case 0:
+        case -1:
           query.filter("dateOfBirth <", dateOfBirth);
           break;
-        case 1:
+        case 0:
           query.filter("dateOfBirth ==", dateOfBirth);
           break;
-        case 2:
+        case 1:
           query.filter("dateOfBirth >", dateOfBirth);
           break;
       }

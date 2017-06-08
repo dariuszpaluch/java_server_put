@@ -14,8 +14,8 @@ public class CourseService implements ICourseDao{
     private final GradeDaoImpl gradeDao = new GradeDaoImpl();
 
     @Override
-    public List<Course> getAllCourse(String teacher) {
-        return this.coursesDao.getAllCourse(teacher);
+    public List<Course> getAllCourse(String name, String teacher) {
+        return this.coursesDao.getAllCourse(name, teacher);
     }
 
     @Override

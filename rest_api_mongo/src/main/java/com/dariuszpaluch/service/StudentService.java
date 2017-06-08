@@ -22,14 +22,14 @@ public class StudentService implements IStudentDao {
   private final CounterDao counterDao = new CounterDao();
 
   @Override
-  public List<Student> getAllStudents(String firstName, String lastName, Date dateOfBirth, int dateOfBirthCompareType) {
+  public List<Student> getAllStudents(int index, String firstName, String lastName, Date dateOfBirth, int dateOfBirthCompareType) {
     if (dateOfBirth != null) {
       if (!ValidCompareType.valid(dateOfBirthCompareType)) {
         throw new WrongCompareTypeException();
       }
 
     }
-    return this.studentDao.getAllStudents(firstName, lastName, dateOfBirth, dateOfBirthCompareType);
+    return this.studentDao.getAllStudents(index, firstName, lastName, dateOfBirth, dateOfBirthCompareType);
   }
 
   @Override

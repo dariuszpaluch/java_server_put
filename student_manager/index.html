@@ -34,10 +34,10 @@
             <table>
                 <thead>
                 <tr>
-                    <th><span>Index</span><input type="search"/></th>
-                    <th><span>Name</span><input type="search"/></th>
-                    <th><span>Surname</span><input type="search"/></th>
-                    <th><span>Birthday</span><input type="search"/></th>
+                    <th><span>Index</span><input placeholder="Szukaj..." type="number" step="1" min="1" data-bind="textInput: students.queryParams.indexQuery"/></th>
+                    <th><span>Name</span><input placeholder="Szukaj..." type="search" data-bind="textInput: students.queryParams.firstNameQuery"/></th>
+                    <th><span>Surname</span><input placeholder="Szukaj..." type="search" data-bind="textInput: students.queryParams.lastNameQuery"/></th>
+                    <th><span>Birthday</span><input type="date"  min="1900-01-01" max="2017-06-09" data-bind="textInput: students.queryParams.dateOfBirthQuery"/></th>
                     <th><span>actions</span></th>
                 </tr>
                 </thead>
@@ -77,8 +77,8 @@
             <table>
                 <thead>
                 <tr>
-                    <th><span>Name</span><input type="search"/></th>
-                    <th><span>Teacher</span><input type="search"/></th>
+                    <th><span>Name</span><input placeholder="Szukaj..." type="search" data-bind="textInput: courses.queryParams.nameQuery"/></th>
+                    <th><span>Teacher</span><input placeholder="Szukaj..." type="search"  data-bind="textInput: courses.queryParams.teacherQuery"/></th>
                     <th><span>Actions</span></th>
                 </tr>
                 </thead>
@@ -120,9 +120,9 @@
             <table>
                 <thead>
                 <tr>
-                    <th><span>Value</span><input type="search"/></th>
-                    <th><span>Course name</span><input type="search"/></th>
-                    <th><span>Created</span><input type="search"/></th>
+                    <th><span>Value</span><input placeholder="Szukaj..." type="search" data-bind="textInput: grades.queryParams.valueQuery"/></th>
+                    <th><span>Course name</span><input placeholder="Szukaj..." type="search" data-bind="textInput: grades.queryParams.courseNameQuery"/></th>
+                    <th><span>Created</span><input placeholder="Szukaj..." type="date" max="2017-06-08" data-bind="textInput: grades.queryParams.createdQuery"/></th>
                     <th><span>Actions</span></th>
                 </tr>
                 </thead>

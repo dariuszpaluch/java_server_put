@@ -14,11 +14,15 @@ public class CourseDaoImpl implements ICourseDao {
   private Datastore datastore = Context.getInstance().getDatastore();
 
   @Override
-  public List<Course> getAllCourse(String teacher) {
+  public List<Course> getAllCourse(String name, String teacher) {
     Query<Course> query = this.datastore.createQuery(Course.class);
 
     if(teacher != null ) {
-      query.filter("teacher ==", teacher);
+      query = query.field("teacher").containsIgnoreCase(teacher);
+    }
+
+    if(name != null ) {
+      query = query.field("name").containsIgnoreCase(name);
     }
 
     return query.asList();
