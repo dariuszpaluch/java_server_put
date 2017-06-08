@@ -1,6 +1,6 @@
 "use strict";
 
-var API = "http://localhost:9997/";
+var API = "http://localhost:9996/";
 
 var prepareModel = function (url, idColumnName) {
   var self = ko.observableArray();
@@ -73,12 +73,15 @@ var prepareModel = function (url, idColumnName) {
   };
 
   self.updateRequest = function(object) {
-    $.ajax({
+      $.ajax({
       url: object.links['self'],
       dataType: "json",
       contentType: "application/json",
       data: ko.mapping.toJSON(object, { ignore: ["links"] }),
-      method: "PUT"
+      method: "PUT",
+      error: function(error) {
+          // alert("Źle wypełnione dane, Proszę popraw");
+      }
     });
   }
 
@@ -93,14 +96,27 @@ var prepareModel = function (url, idColumnName) {
       data: ko.mapping.toJSON(object),
       method: "POST",
       success: function(data) {
-        object[self.idColumnName](data[self.idColumnName]); //set id from api
+          var response = ko.mapping.fromJS(data);
+          object[self.idColumnName](response[self.idColumnName]());
 
-        if(data.course) {
-          object.course.name(data.course.name);
-        }
+          object.links = [];
+
+          if($.isArray(data.link)) {
+              data.link.forEach(function(link) {
+                  object.links[link.params.rel] = link.href;
+              });
+          } else {
+              object.links[data.link.params.rel] = data.link.href;
+          }
+
+          ko.computed(function() {
+              return ko.toJSON(object);
+          }).subscribe(function() {
+              self.updateRequest(object);
+          });
       },
       error: function(error) {
-        console.error(error);
+      //     alert("Źle wypełnione dane, Proszę popraw");
       }
     });
   };
@@ -181,6 +197,7 @@ function studentManagerViewModel() {
         }
       } else {
         data[property.name] = property.value;
+
       }
     });
 
@@ -195,7 +212,8 @@ function studentManagerViewModel() {
     data['id'] = null;
 
     const observableData = ko.mapping.fromJS(data);
-    self.grades.push(observableData);
+
+      self.grades.push(observableData);
   };
 }
 

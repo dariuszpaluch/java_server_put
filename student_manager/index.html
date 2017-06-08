@@ -82,7 +82,7 @@
                     <th><span>Actions</span></th>
                 </tr>
                 </thead>
-                <tbody data-bind="foreach: courses, visible: courses().length > 0">
+                <tbody data-bind="foreach: courses">
                 <tr>
                     <td>
                         <input data-bind="value: name" type="text"/>
@@ -128,7 +128,7 @@
                 </thead>
                 <tbody data-bind="foreach: grades, visible: grades().length > 0">
                 <tr>
-                    <td><input data-bind="value: value"/></td>
+                    <td><input data-bind="value: value" min="2" step="0.5" max="5" required/></td>
                     <td>
                         <select
                                 name="course"
@@ -137,7 +137,7 @@
                             </option>
                         </select>
                     </td>
-                    <td><input data-bind="value: created" type="date" max='2017-06-02'/></td>
+                    <td><input data-bind="value: created" type="date" max='2017-06-02' required/></td>
                     <td>
                         <button data-bind="click: $parent.grades.delete"><img src="img/delete.png" alt="delete"/>
                         </button>

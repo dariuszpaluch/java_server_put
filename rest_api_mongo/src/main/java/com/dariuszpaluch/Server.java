@@ -24,7 +24,7 @@ public class Server {
         Context context = Context.getInstance();
         context.initialize();
 
-        URI baseUri = UriBuilder.fromUri("http://localhost").port(9997).build();
+        URI baseUri = UriBuilder.fromUri("http://localhost").port(9996).build();
 
         ResourceConfig config = new ResourceConfig().packages("com.dariuszpaluch").registerClasses(
                 DeclarativeLinkingFeature.class,
