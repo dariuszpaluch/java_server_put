@@ -78,6 +78,31 @@ var prepareModel = function (url, idColumnName) {
     });
   };
 
+  self.add = function(form) {
+    var data = {};
+
+    $(form).serializeArray().map(function (property) {
+      if(property.name !== 'index') {
+
+        data[property.name] = property.value;
+      }
+    });
+
+    $(form).find("tbody").filter(function () {
+      return $(this).hasClass('edit');
+    }).find("input").each(function () {
+
+      $(this).val('');
+    });
+
+    data[self.idColumnName] = null;
+
+    const observableData = ko.mapping.fromJS(data);
+
+    self.push(observableData);
+  };
+
+
   self.updateRequest = function(object) {
       $.ajax({
       url: object.links['self'],
@@ -85,6 +110,7 @@ var prepareModel = function (url, idColumnName) {
       contentType: "application/json",
       data: ko.mapping.toJSON(object, { ignore: ["links"] }),
       method: "PUT",
+
       error: function(error) {
           // alert("Źle wypełnione dane, Proszę popraw");
       }
@@ -109,6 +135,7 @@ var prepareModel = function (url, idColumnName) {
 
           if($.isArray(data.link)) {
               data.link.forEach(function(link) {
+
                   object.links[link.params.rel] = link.href;
               });
           } else {
@@ -117,9 +144,11 @@ var prepareModel = function (url, idColumnName) {
 
           ko.computed(function() {
               return ko.toJSON(object);
+
           }).subscribe(function() {
               self.updateRequest(object);
           });
+
       },
       error: function(error) {
       //     alert("Źle wypełnione dane, Proszę popraw");
@@ -127,28 +156,7 @@ var prepareModel = function (url, idColumnName) {
     });
   };
 
-  self.add = function(form) {
-    var data = {};
 
-    $(form).serializeArray().map(function (property) {
-      if(property.name !== 'index') {
-        data[property.name] = property.value;
-      }
-    });
-
-    //clear only edit inputs
-    $(form).find("tbody").filter(function () {
-      return $(this).hasClass('edit');
-    }).find("input").each(function () {
-      $(this).val('');
-    });
-
-    data[self.idColumnName] = null;
-
-    const observableData = ko.mapping.fromJS(data);
-
-    self.push(observableData);
-  }
   self.deleteRequest = function(object) {
     $.ajax({
       url: object.links.self,
@@ -161,10 +169,12 @@ var prepareModel = function (url, idColumnName) {
     self.remove(this);
   };
 
+
   self.parseQuery = function() {
     var queries = {};
     Object.keys(self.queryParams).forEach(function(key) {
       if(self.queryParams[key]()) {
+
         queries[key] = self.queryParams[key];
       }
     });
@@ -184,9 +194,13 @@ function studentManagerViewModel() {
     var index = this.index();
     var firstName = this.firstName();
     var lastName = this.lastName();
+
+
+
+
     self.grades.studentIndex = index;
     self.grades.firstName(firstName);
-    self.grades.lastName(   lastName);
+    self.grades.lastName(lastName);
     self.grades.index(index);
     self.grades.url = "students/" + index + "/grades";
     self.grades.get();
@@ -258,6 +272,7 @@ function studentManagerViewModel() {
       self.grades.push(observableData);
   };
 
+
   self.grades.queryParams = {
     valueQuery: ko.observable(),
     courseNameQuery: ko.observable(),
@@ -266,6 +281,7 @@ function studentManagerViewModel() {
 
   Object.keys(self.grades.queryParams).forEach(function(key) {
     self.grades.queryParams[key].subscribe(function() {
+
       self.grades.parseQuery();
     });
   });
@@ -273,5 +289,6 @@ function studentManagerViewModel() {
 
 
 $(document).ready(function () {
+
   ko.applyBindings(new studentManagerViewModel());
 });

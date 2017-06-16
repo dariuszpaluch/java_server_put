@@ -1,4 +1,0 @@
-<th><span>Index</span><input placeholder="Szukaj..." type="search" step="1" min="1" data-bind="textInput: model.students.queryParams.indexQuery"/></th>
-                    <th><span>Name</span><input placeholder="Szukaj..." type="search" data-bind="textInput: model.students.queryParams.firstNameQuery"/></th>
-                    <th><span>Surname</span><input placeholder="Szukaj..." type="search" data-bind="textInput: model.students.queryParams.lastNameQuery"/></th>
-                    <th><span>Birthday</span><input type="date"  min="1900-01-01" max="2017-06-09" data-bind="textInput: model.students.queryParams.dateOfBirthQuery"/></th>
